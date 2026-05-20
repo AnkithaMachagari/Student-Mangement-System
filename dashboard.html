@@ -1,0 +1,2653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Performance Analyzer | SPA</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+<style>
+:root {
+  --bc:#dbeafe;--bc2:#bfdbfe;--bc3:#eff6ff;--bb:#93c5fd;--bt:#1e3a5f;--bt2:#1d4ed8;--bt3:#3b82f6;
+  --danger:#ef4444;--radius:12px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Space Grotesk',sans-serif;min-height:100vh;background:#fce4ec;overflow-x:hidden;}
+.dabba{
+  background:#fff;
+  color:#333;
+  font-family:'JetBrains Mono',monospace;
+  font-size:.85rem;
+  font-weight:400;
+  padding:14px 18px;
+  width:max-content;
+  box-shadow:0 4px 12px rgba(0,0,0,.15);
+  border-radius:2px;
+  margin-left:40px;
+  margin-top:30px;
+  transform:rotate(-3deg);
+  line-height:1.6;
+  text-align:center;
+  position:relative;
+}
+.dabba::before{
+  content:'';
+  position:absolute;
+  top:-10px;
+  left:50%;
+  transform:translateX(-50%);
+  width:30px;
+  height:14px;
+  background:#d4b483;
+  border-radius:2px;
+  opacity:.8;
+}
+
+/* ── LOGIN ── */
+#login-page{min-height:100vh;display:flex;align-items:center;justify-content:center;background:#efe3e5;}
+.login-wrap{width:95%;max-width:1100px;min-height:600px;background:#f6ebed;border-radius:12px;display:flex;align-items:center;justify-content:space-between;padding:60px;box-shadow:0 15px 40px rgba(0,0,0,0.12);background-image:linear-gradient(rgba(180,80,120,.05)1px,transparent 1px),linear-gradient(90deg,rgba(180,80,120,.05)1px,transparent 1px);background-size:32px 32px;}
+.left-side{width:50%;}
+.sticker{background:#efcdd3;color:#000;font-family:Georgia,serif;font-weight:700;width:max-content;padding:14px 32px;box-shadow:0 6px 18px rgba(0,0,0,.08);}
+.sticker.one{font-size:4rem;margin-left:20px;margin-top:60px;transform:rotate(-2deg);}
+.sticker.two{font-size:4rem;margin-left:0px;margin-top:22px;transform:rotate(-3deg);}
+.sticker.three{font-size:4rem;margin-left:60px;margin-top:22px;}
+.login-card{width:400px;background:#d8d8d8;border-radius:40px;padding:40px;box-shadow:0 10px 30px rgba(0,0,0,.08);}
+.login-card h2{color:#111;font-size:1.8rem;margin-bottom:1.8rem;font-weight:700;}
+.fg{margin-bottom:1.2rem;}
+.fg label{display:block;margin-bottom:8px;color:#111;font-size:1rem;font-weight:500;}
+.fg input,.fg select{width:100%;height:50px;border:none;outline:none;background:#eadcdf;border-radius:30px;padding:0 20px;font-size:1rem;color:#111;font-family:inherit;}
+.btn-login{width:100%;height:52px;border:none;border-radius:30px;background:#c2185b;color:#fff;font-size:1rem;font-weight:700;cursor:pointer;margin-top:16px;transition:.2s;}
+.btn-login:hover{opacity:.9;transform:translateY(-1px);}
+.err{color:#c62828;font-size:.85rem;margin-top:6px;display:none;}
+
+/* ── FORCE CHANGE PASSWORD SCREEN ── */
+#change-pw-page{display:none;min-height:100vh;align-items:center;justify-content:center;background:#efe3e5;}
+.cpw-card{background:#fff;border-radius:24px;padding:2.5rem;width:420px;max-width:95vw;box-shadow:0 10px 40px rgba(0,0,0,.12);}
+.cpw-card h2{color:#c2185b;font-size:1.5rem;margin-bottom:.5rem;}
+.cpw-card .subtitle{color:#666;font-size:.9rem;margin-bottom:1.8rem;}
+.pw-bar{height:6px;border-radius:3px;margin-top:6px;transition:all .3s;display:none;}
+.pw-bar.weak{background:#ef4444;width:33%;}
+.pw-bar.medium{background:#f59e0b;width:66%;}
+.pw-bar.strong{background:#22c55e;width:100%;}
+.pw-hint{font-size:.75rem;color:#888;margin-top:4px;}
+
+/* ── APP ── */
+#app{display:none;height:100vh;flex-direction:row;overflow:hidden;}
+.sidebar{width:250px;min-width:250px;background:#f8bbd0;border-right:1px solid #f48fb1;display:flex;flex-direction:column;overflow-y:auto;padding-top:16px;}
+.sidebar-header{padding:.8rem 1rem 1rem;border-bottom:1px solid rgba(80,120,210,.25);display:flex;align-items:center;gap:10px;}
+.sidebar-header .logo-icon{width:34px;height:34px;background:linear-gradient(135deg,#e91e8c,#c2185b);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1rem;}
+.sidebar-header span{font-weight:700;font-size:.95rem;color:#880e4f;}
+.user-card{margin:.6rem;padding:.7rem;background:rgba(255,255,255,.45);border-radius:10px;border:1px solid rgba(80,120,210,.25);}
+.uname{font-size:.88rem;font-weight:600;color:#1a1030;}
+.role-badge{display:inline-block;margin-top:4px;padding:2px 8px;border-radius:20px;font-size:.68rem;font-weight:700;text-transform:uppercase;}
+.role-admin{background:rgba(239,68,68,.15);color:#ef4444;}
+.role-faculty{background:rgba(255,107,181,.15);color:#ff6bb5;}
+.role-student{background:rgba(233,30,140,.15);color:#e91e8c;}
+.nav-section-label{font-size:.62rem;color:#3a5080;text-transform:uppercase;letter-spacing:1.5px;padding:.5rem .9rem .2rem;font-weight:700;}
+.nav-item{display:flex;align-items:center;gap:9px;padding:.55rem .9rem;border-radius:9px;cursor:pointer;font-size:.83rem;color:#1a1a3a;font-weight:500;transition:all .15s;margin:2px 6px;}
+.nav-item:hover{background:rgba(233,30,140,.15);color:#c2185b;}
+.nav-item.active{background:rgba(233,30,140,.22);color:#c2185b;font-weight:700;border-left:3px solid #e91e8c;padding-left:calc(.9rem - 3px);}
+.sidebar-footer{margin-top:auto;padding:1rem;border-top:1px solid rgba(80,120,210,.25);}
+.main-content{flex:1;overflow-y:auto;display:flex;flex-direction:column;background:#fce4ec;background-image:linear-gradient(rgba(233,30,140,.04)1px,transparent 1px),linear-gradient(90deg,rgba(233,30,140,.04)1px,transparent 1px);background-size:28px 28px;}
+.topbar{padding:.9rem 1.3rem;background:#f8bbd0;border-bottom:1px solid #f48fb1;display:flex;align-items:center;gap:1rem;}
+.topbar h2{font-size:1rem;font-weight:600;color:#880e4f;}
+.topbar .bc{color:#ad1457;font-size:.78rem;}
+.profile-box{display:flex;align-items:center;gap:10px;background:#fce4ec;border:1px solid #f48fb1;padding:8px 14px;border-radius:12px;margin-left:auto;}
+.profile-avatar{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:.95rem;}
+.profile-name{font-size:.85rem;font-weight:700;color:#880e4f;}
+.profile-role{font-size:.7rem;color:#ad1457;}
+.page-content{padding:1.3rem;flex:1;}
+
+/* CARDS */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:1rem;margin-bottom:1.3rem;}
+.stat-card{background:var(--bc);border:1px solid var(--bb);border-radius:var(--radius);padding:1.1rem;position:relative;overflow:hidden;box-shadow:0 4px 20px rgba(10,30,80,.3);}
+.stat-card .label{font-size:.72rem;color:var(--bt2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
+.stat-card .value{font-size:1.9rem;font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--bt);}
+.stat-card .sub{font-size:.72rem;color:var(--bt3);margin-top:4px;}
+.chart-card{background:var(--bc);border:1px solid var(--bb);border-radius:var(--radius);padding:1.1rem;box-shadow:0 4px 20px rgba(10,30,80,.25);}
+.chart-card h3{font-size:.88rem;color:var(--bt2);margin-bottom:.8rem;font-weight:500;}
+.section-row{display:grid;gap:1rem;margin-bottom:1rem;}
+.col-2{grid-template-columns:1fr 1fr;}
+.col-3{grid-template-columns:1fr 1fr 1fr;}
+
+/* TABLE */
+.table-wrap{background:var(--bc);border:1px solid var(--bb);border-radius:var(--radius);overflow:hidden;box-shadow:0 4px 20px rgba(10,30,80,.25);}
+.t-header{padding:.9rem 1.1rem;display:flex;align-items:center;gap:.8rem;border-bottom:1px solid var(--bb);background:var(--bc2);flex-wrap:wrap;}
+.t-header h3{font-size:.9rem;font-weight:600;color:var(--bt);}
+table{width:100%;border-collapse:collapse;font-size:.85rem;}
+thead th{padding:.65rem 1.1rem;text-align:left;font-size:.72rem;font-weight:600;color:var(--bt3);text-transform:uppercase;letter-spacing:.5px;background:var(--bc2);border-bottom:1px solid var(--bb);}
+tbody tr{border-bottom:1px solid var(--bb);transition:background .15s;}
+tbody tr:hover{background:var(--bc3);}
+tbody tr:last-child{border-bottom:none;}
+td{padding:.7rem 1.1rem;color:var(--bt);}
+.grade-badge{display:inline-block;width:26px;height:26px;border-radius:6px;text-align:center;line-height:26px;font-weight:700;font-size:.78rem;}
+.grade-A{background:rgba(255,107,181,.2);color:#ff6bb5;}
+.grade-B{background:rgba(233,30,140,.2);color:#e91e8c;}
+.grade-C{background:rgba(194,24,91,.2);color:#c2185b;}
+.grade-D{background:rgba(245,158,11,.2);color:#f59e0b;}
+.grade-F{background:rgba(239,68,68,.2);color:#ef4444;}
+.dept-chip{display:inline-block;padding:2px 9px;border-radius:20px;font-size:.72rem;font-weight:600;background:rgba(59,130,246,.2);color:#93c5fd;border:1px solid rgba(59,130,246,.3);}
+.marks-bar{display:flex;align-items:center;gap:7px;}
+.marks-bar .bar{height:6px;border-radius:3px;background:var(--bb);flex:1;overflow:hidden;}
+.marks-bar .fill{height:100%;border-radius:3px;background:linear-gradient(90deg,#3b82f6,#60a5fa);}
+.action-btns{display:flex;gap:5px;}
+.security-badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:20px;font-size:.68rem;font-weight:700;background:rgba(34,197,94,.15);border:1px solid rgba(34,197,94,.4);color:#16a34a;margin-left:6px;}
+.must-change-badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:20px;font-size:.68rem;font-weight:700;background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.4);color:#d97706;margin-left:6px;}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:5px;padding:.45rem .9rem;border-radius:8px;border:1px solid var(--bb);background:var(--bc3);color:var(--bt);font-family:inherit;font-size:.82rem;font-weight:500;cursor:pointer;transition:all .15s;}
+.btn:hover{background:var(--bc2);border-color:#3b82f6;color:#60a5fa;}
+.btn-sm{padding:.3rem .65rem;font-size:.76rem;}
+.btn-success{background:rgba(59,130,246,.2);border-color:#3b82f6;color:#93c5fd;}
+.btn-danger{background:rgba(239,68,68,.2);border-color:var(--danger);color:#fca5a5;}
+.btn-ghost{background:transparent;}
+.btn-primary{display:inline-flex;align-items:center;gap:5px;padding:.55rem 1.3rem;background:linear-gradient(135deg,#2563eb,#3b82f6);border:none;border-radius:8px;color:#fff;font-family:inherit;font-size:.88rem;font-weight:600;cursor:pointer;transition:all .15s;}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 4px 15px rgba(59,130,246,.4);}
+
+/* MODAL */
+.modal-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);z-index:100;align-items:center;justify-content:center;}
+.modal-backdrop.open{display:flex;}
+.modal{background:var(--bc);border:1px solid var(--bb);border-radius:18px;padding:2rem;width:500px;max-width:95vw;max-height:90vh;overflow-y:auto;}
+.modal h3{font-size:1.05rem;margin-bottom:1.3rem;color:var(--bt);}
+.modal-footer{display:flex;gap:8px;justify-content:flex-end;margin-top:1.3rem;}
+.mfg{margin-bottom:1rem;}
+.mfg label{display:block;margin-bottom:5px;color:#4b5563;font-size:.85rem;font-weight:500;}
+.mfg input,.mfg select{width:100%;padding:.55rem .85rem;background:var(--bc2);border:1px solid var(--bb);border-radius:8px;color:var(--bt);font-family:inherit;font-size:.88rem;outline:none;}
+.mfg input:focus,.mfg select:focus{border-color:#3b82f6;}
+
+/* GRADE BARS */
+.grade-bars{display:flex;flex-direction:column;gap:9px;}
+.grade-row{display:flex;align-items:center;gap:9px;font-size:.82rem;}
+.grade-row .gl{width:18px;font-weight:700;}
+.grade-row .gb{flex:1;height:18px;border-radius:4px;background:var(--bb);overflow:hidden;}
+.grade-row .gf{height:100%;border-radius:4px;}
+.grade-row .gn{width:26px;text-align:right;color:var(--bt2);font-family:'JetBrains Mono';font-size:.76rem;}
+
+/* COMPARE */
+.compare-bar-wrap{display:flex;flex-direction:column;gap:7px;}
+.compare-bar-row{display:grid;grid-template-columns:110px 1fr 50px;align-items:center;gap:7px;font-size:.8rem;}
+.compare-bar-row .cb-name{color:var(--bt);font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.compare-bar-row .cb-bar{height:18px;background:var(--bb);border-radius:4px;overflow:hidden;}
+.compare-bar-row .cb-fill{height:100%;border-radius:4px;transition:width 1s ease;}
+.compare-bar-row .cb-val{font-family:'JetBrains Mono';font-size:.76rem;color:var(--bt2);text-align:right;}
+
+/* DEPT */
+.dept-grid{display:flex;flex-direction:column;gap:7px;}
+.dept-row{display:flex;align-items:center;gap:10px;padding:.6rem .9rem;background:var(--bc2);border-radius:9px;font-size:.82rem;}
+.dept-row .dn{font-weight:600;min-width:55px;color:var(--bt);}
+.dept-row .db{flex:1;height:8px;border-radius:4px;background:var(--bb);overflow:hidden;}
+.dept-row .df{height:100%;border-radius:4px;background:linear-gradient(90deg,#2563eb,#60a5fa);}
+.dept-row .dv{min-width:38px;text-align:right;font-family:'JetBrains Mono';font-size:.78rem;color:var(--bt2);}
+
+/* LEADER */
+.leader-card{background:var(--bc);border:1px solid var(--bb);border-radius:var(--radius);}
+.leader-item{display:flex;align-items:center;gap:10px;padding:.85rem 1.1rem;border-bottom:1px solid var(--bb);transition:background .15s;cursor:pointer;}
+.leader-item:hover{background:var(--bc3);}
+.leader-item:last-child{border-bottom:none;}
+.rank-num{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.82rem;flex-shrink:0;}
+.rank-1{background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;}
+.rank-2{background:linear-gradient(135deg,#60a5fa,#3b82f6);color:#fff;}
+.rank-3{background:linear-gradient(135deg,#93c5fd,#2563eb);color:#fff;}
+.rank-n{background:var(--bc3);color:var(--bt2);}
+.leader-info .ln{font-size:.88rem;font-weight:600;color:var(--bt);}
+.leader-info .ld{font-size:.72rem;color:var(--bt2);}
+.leader-marks{font-family:'JetBrains Mono';font-size:.96rem;font-weight:700;color:#60a5fa;margin-left:auto;}
+
+/* AUDIT */
+.audit-item{display:flex;gap:10px;align-items:flex-start;padding:.7rem 1.1rem;border-bottom:1px solid var(--bb);font-size:.78rem;}
+.audit-item:last-child{border-bottom:none;}
+.audit-dot{width:8px;height:8px;border-radius:50%;margin-top:5px;flex-shrink:0;}
+.audit-INSERT{background:#60a5fa;}.audit-UPDATE{background:#3b82f6;}.audit-DELETE{background:#ef4444;}.audit-LOGIN{background:#93c5fd;}
+.audit-item .at{color:var(--bt);font-weight:500;}
+.audit-item .ad{color:var(--bt2);}
+
+/* TOAST */
+.toast-container{position:fixed;bottom:1.3rem;right:1.3rem;z-index:999;display:flex;flex-direction:column;gap:7px;}
+.toast{padding:.7rem 1.1rem;border-radius:var(--radius);font-size:.85rem;font-weight:500;box-shadow:0 8px 30px rgba(0,0,0,.3);display:flex;align-items:center;gap:7px;min-width:240px;}
+.toast.success{background:#dbeafe;border:1px solid #3b82f6;color:#1e3a5f;}
+.toast.error{background:#fee2e2;border:1px solid #ef4444;color:#991b1b;}
+.toast.info{background:#eff6ff;border:1px solid #2563eb;color:#1d4ed8;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+.empty-state{text-align:center;padding:2.5rem;color:var(--bt3);}
+.empty-state .ei{font-size:2.5rem;margin-bottom:.8rem;}
+.spinner{display:inline-block;width:20px;height:20px;border:3px solid var(--bb);border-top-color:#3b82f6;border-radius:50%;animation:spin .7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* RISK */
+.risk-high{color:#dc2626;background:rgba(220,38,38,.1);padding:2px 8px;border-radius:12px;font-size:.7rem;font-weight:700;border:1px solid rgba(220,38,38,.3);}
+.risk-med{color:#d97706;background:rgba(217,119,6,.1);padding:2px 8px;border-radius:12px;font-size:.7rem;font-weight:700;border:1px solid rgba(217,119,6,.3);}
+.risk-low{color:#16a34a;background:rgba(22,163,74,.1);padding:2px 8px;border-radius:12px;font-size:.7rem;font-weight:700;border:1px solid rgba(22,163,74,.3);}
+</style>
+</head>
+<body>
+
+<!-- ═══ LOGIN ═══ -->
+<div id="login-page">
+  <div class="login-wrap">
+  <div class="left-side">
+  <div class="dabba">Data Base<br>Management<br>Systems</div>
+  <div class="sticker one">Student</div>
+  <div class="sticker two">Management</div>
+  <div class="sticker three">System</div>
+</div>
+    <div class="login-card">
+      <h2>Sign in</h2>
+      <div class="fg"><label>Username</label><input type="text" id="inp-u" placeholder="Enter username" autocomplete="username"></div>
+      <div class="fg"><label>Password</label><input type="password" id="inp-p" placeholder="Enter password" autocomplete="current-password"></div>
+      <div class="fg">
+        <label>Role</label>
+        <select id="inp-r">
+          <option value="" disabled selected>Select role</option>
+          <option value="admin">Admin</option>
+          <option value="faculty">Faculty</option>
+          <option value="student">Student</option>
+        </select>
+      </div>
+      <div class="err" id="login-err">Invalid credentials</div>
+      <button class="btn-login" onclick="doLogin()">Sign in →</button>
+<div style="text-align:center;margin-top:.8rem">
+  <span onclick="showForgotModal()" 
+        style="font-size:.82rem;color:#c2185b;cursor:pointer;text-decoration:underline">
+    Forgot Password?
+  </span>
+</div>
+      
+    </div>
+</div>
+  </div>
+</div>
+
+<!-- ═══ FORCE CHANGE PASSWORD ═══ -->
+<div id="change-pw-page" style="display:none;min-height:100vh;align-items:center;justify-content:center;background:#efe3e5;">
+  <div class="cpw-card">
+    <h2>🔐 Set Your Password</h2>
+    <p class="subtitle">Your account was created with a temporary password.<br>Please set your own password to continue.</p>
+    <div class="fg"><label>Current (temp) password</label><input type="password" id="cpw-current" placeholder="Your temp password"></div>
+    <div class="fg">
+      <label>New password</label>
+      <input type="password" id="cpw-new" placeholder="Min 6 characters" oninput="checkStr(this)">
+      <div class="pw-bar" id="cpw-bar"></div>
+      <div class="pw-hint" id="cpw-hint"></div>
+    </div>
+    <div class="fg"><label>Confirm new password</label><input type="password" id="cpw-confirm" placeholder="Repeat new password"></div>
+    <div class="err" id="cpw-err"></div>
+    <button class="btn-login" style="margin-top:14px" onclick="doForceChangePw()">Set Password & Continue →</button>
+  </div>
+</div>
+
+
+<!-- ═══ APP ═══ -->
+<div id="app">
+  <nav class="sidebar">
+    <div class="sidebar-header">
+      <div class="logo-icon">🎓</div>
+      <span>SPA System</span>
+    </div>
+    <div class="user-card" id="user-card"></div>
+    <div id="nav-menu" style="padding:.3rem .4rem;"></div>
+    <div class="sidebar-footer">
+  <button id="btn-security-answer" class="btn btn-ghost btn-sm" style="width:100%;justify-content:center;color:#c2185b;margin-bottom:.4rem" onclick="setMySecurityAnswer()">🔐 Set Security Answer</button>
+  <button class="btn btn-ghost" style="width:100%;justify-content:center;color:#880e4f;font-weight:600" onclick="doLogout()">🚪 Logout</button>
+</div>
+  </nav>
+  <div class="main-content">
+    <div class="topbar">
+  <div><div class="bc" id="breadcrumb">Home</div><h2 id="page-title">Dashboard</h2></div>
+  <div id="topbar-actions"></div>
+  <div id="notif-bell" style="position:relative;margin-left:auto;margin-right:.8rem"></div>
+  <div class="profile-box" id="profile-box"></div>
+</div>
+    <div class="page-content" id="page-content"></div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="modal-backdrop">
+  <div class="modal">
+    <h3 id="modal-title"></h3>
+    <div id="modal-body"></div>
+    <div class="modal-footer" id="modal-footer"></div>
+  </div>
+</div>
+<div class="toast-container" id="toast-container"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+// ═══════════════════════ CONFIG ═══════════════════════
+const API = "http://127.0.0.1:5000/api";   // Flask URL
+
+// ═══════════════════════ STATE ════════════════════════
+let currentUser = null;
+let _charts = {};
+// Store temp password during force-change flow
+let _tempPassword = "";
+
+// ═══════════════════════ HELPERS ══════════════════════
+function grade(m){ if(m>=90)return'A';if(m>=75)return'B';if(m>=60)return'C';if(m>=40)return'D';return'F'; }
+function gradeColor(g){ return{A:'#ff6bb5',B:'#e91e8c',C:'#c2185b',D:'#f59e0b',F:'#ef4444'}[g]||'#60a5fa'; }
+function avg(arr){ return arr.length?(arr.reduce((a,b)=>a+b,0)/arr.length):0; }
+
+function toast(msg, type='success'){
+  const tc = document.getElementById('toast-container');
+  const t = document.createElement('div');
+  t.className = `toast ${type}`;
+  t.innerHTML = `${{success:'✅',error:'❌',info:'ℹ️'}[type]||''} ${msg}`;
+  tc.appendChild(t);
+  setTimeout(()=>t.remove(), 3500);
+}
+
+function openModal(title, body, footer=''){
+  document.getElementById('modal-title').textContent = title;
+  document.getElementById('modal-body').innerHTML = body;
+  document.getElementById('modal-footer').innerHTML = footer +
+    `<button class="btn btn-ghost" onclick="closeModal()">Cancel</button>`;
+  document.getElementById('modal-backdrop').classList.add('open');
+}
+function closeModal(){ document.getElementById('modal-backdrop').classList.remove('open'); }
+document.getElementById('modal-backdrop').addEventListener('click', e=>{ if(e.target===e.currentTarget) closeModal(); });
+
+function destroyChart(id){ if(_charts[id]){_charts[id].destroy();delete _charts[id];} }
+
+async function apiFetch(path, opts={}){
+  const res = await fetch(API + path, {
+    credentials: 'include',
+    headers: {'Content-Type':'application/json', ...(opts.headers||{})},
+    ...opts,
+    body: opts.body ? JSON.stringify(opts.body) : undefined,
+  });
+  const data = await res.json().catch(()=>({}));
+  if(!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
+  return data;
+}
+
+function checkStr(input){
+  const v=input.value, bar=document.getElementById('cpw-bar'), hint=document.getElementById('cpw-hint');
+  if(!bar) return;
+  bar.style.display='block';
+  if(v.length<6){ bar.className='pw-bar weak'; if(hint) hint.textContent='Too short (min 6 chars)'; }
+  else if(v.length<10||!/[A-Z]/.test(v)||!/[0-9]/.test(v)){ bar.className='pw-bar medium'; if(hint) hint.textContent='Medium — add uppercase & numbers'; }
+  else{ bar.className='pw-bar strong'; if(hint) hint.textContent='Strong ✓'; }
+}
+
+// ═══════════════════════ AUTH ═════════════════════════
+async function doLogin(){
+  const un = document.getElementById('inp-u').value.trim();
+  const pw = document.getElementById('inp-p').value;
+  const rl = document.getElementById('inp-r').value;
+  const errEl = document.getElementById('login-err');
+  errEl.style.display = 'none';
+  if(!un||!pw||!rl){ errEl.innerHTML='Please fill all fields.'; errEl.style.display='block'; return; }
+  try {
+    const user = await apiFetch('/login', { method:'POST', body:{username:un, password:pw, role:rl} });
+    currentUser = user;
+    if(user.must_change_pwd){
+      // Force change screen
+      _tempPassword = pw;
+      document.getElementById('login-page').style.display = 'none';
+      document.getElementById('change-pw-page').style.display = 'flex';
+      document.getElementById('cpw-current').value = pw; // prefill for convenience
+    } else {
+      enterApp();
+    }
+  } catch(e){
+    errEl.innerHTML = `❌ ${e.message}`;
+    errEl.style.display = 'block';
+  }
+}
+
+async function doForceChangePw(){
+  const current = document.getElementById('cpw-current').value;
+  const newPw   = document.getElementById('cpw-new').value;
+  const confirm = document.getElementById('cpw-confirm').value;
+  const errEl   = document.getElementById('cpw-err');
+  errEl.style.display = 'none';
+
+  if(newPw !== confirm){
+    errEl.innerHTML = '❌ Passwords do not match.'; errEl.style.display='block'; return;
+  }
+  if(newPw.length < 6){
+    errEl.innerHTML = '❌ Password must be at least 6 characters.'; errEl.style.display='block'; return;
+  }
+  try {
+    await apiFetch('/change-password', { method:'POST', body:{current_password:current, new_password:newPw} });
+    currentUser.must_change_pwd = false;
+    _tempPassword = '';
+    document.getElementById('change-pw-page').style.display = 'none';
+    enterApp();
+    toast('Password set! Welcome 🎉');
+  } catch(e){
+    errEl.innerHTML = `❌ ${e.message}`; errEl.style.display='block';
+  }
+}
+
+function enterApp(){
+  document.getElementById('login-page').style.display = 'none';
+  document.getElementById('change-pw-page').style.display = 'none';
+  document.getElementById('app').style.display = 'flex';
+  buildSidebar();
+  buildProfileBox();
+  navigate('dashboard');
+  toast(`Welcome, ${currentUser.username}!`);
+  loadNotifications();
+}
+
+async function doLogout(){
+  try { await apiFetch('/logout', {method:'POST'}); } catch(_){}
+  currentUser = null;
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('login-page').style.display = 'flex';
+  document.getElementById('inp-u').value='';
+  document.getElementById('inp-p').value='';
+  document.getElementById('inp-r').selectedIndex=0;
+  toast('Logged out.','info');
+}
+
+// On page load — check if already logged in (session cookie)
+window.addEventListener('load', async ()=>{
+  try {
+    const user = await apiFetch('/me');
+    currentUser = user;
+    if(user.must_change_pwd){
+      document.getElementById('login-page').style.display='none';
+      document.getElementById('change-pw-page').style.display='flex';
+    } else {
+      enterApp();
+    }
+  } catch(_){ /* not logged in, show login */ }
+});
+
+// ═══════════════════════ SIDEBAR ══════════════════════
+const MENUS = {
+  admin:[
+    {s:'Overview'},
+    {id:'dashboard',   i:'📊', l:'Dashboard'},
+    {id:'analytics',   i:'📈', l:'Analytics'},
+    {s:'Students'},
+    {id:'view-students', i:'📋', l:'All Students'},
+    {id:'add-student',   i:'➕', l:'Add Student'},
+    {id:'advanced-search', i:'🔍', l:'Advanced Search'},
+    {id:'compare',       i:'⚖️', l:'Compare Students'},
+    {s:'Reports'},
+    {id:'top-performers',i:'🏆', l:'Top Performers'},
+    {id:'leaderboard',   i:'🏅', l:'Leaderboard'},
+    {id:'at-risk',       i:'⚠️', l:'At-Risk Students'},
+    {id:'bonus-marks',   i:'🎁', l:'Bonus Marks'},
+    {id:'attendance',    i:'📅', l:'Attendance'},      // ← NEW
+    {s:'Admin'},
+    {id:'manage-users',  i:'👤', l:'Manage Users'},
+    {id:'audit-log',     i:'🔒', l:'Audit Log'},
+  ],
+  faculty:[
+    {s:'Overview'},
+    {id:'dashboard',     i:'📊', l:'Dashboard'},
+    {id:'analytics',     i:'📈', l:'Analytics'},
+    {s:'Students'},
+    {id:'view-students', i:'📋', l:'All Students'},
+    {id:'add-student',   i:'➕', l:'Add Student'},
+    {id:'search-dept',   i:'🔍', l:'Search by Dept'},
+    {id:'compare',       i:'⚖️', l:'Compare Students'},
+    {s:'Reports'},
+    {id:'top-performers',i:'🏆', l:'Top Performers'},
+    {id:'at-risk',       i:'⚠️', l:'At-Risk Students'},
+    {id:'bonus-marks',   i:'🎁', l:'Bonus Marks'},
+    {id:'attendance',    i:'📅', l:'Attendance'}, 
+    {id:'timetable',     i:'🗓️', l:'Timetable'},
+    {id:'assignments',   i:'📝', l:'Assignments'},
+    {id:'enter-marks',   i:'📊', l:'Enter Marks'},
+    {id:'branch-marks', i:'📊', l:'Branch Marks'},    // ← NEW
+  ],
+  student:[
+    {s:'My Account'},{id:'my-record',i:'👤',l:'My Record'},{id:'my-subjects',i:'📚',l:'Subject Breakdown'},{id:'my-attendance',i:'📅',l:'My Attendance'},
+    {id:'my-timetable',  i:'🗓️', l:'My Timetable'},
+    {id:'my-assignments',i:'📝', l:'My Assignments'},
+    {id:'my-progress',   i:'📈', l:'Semester Progress'},
+  ],
+};
+function buildSidebar(){
+  const role = currentUser.role;
+  document.getElementById('user-card').innerHTML=`
+    <div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#e91e8c,#c2185b);display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;margin-bottom:5px">${currentUser.username[0].toUpperCase()}</div>
+    <div class="uname">${currentUser.username}</div>
+    <span class="role-badge role-${role}">${role}</span>`;
+  let html='';
+  (MENUS[role]||[]).forEach(item=>{
+    if(item.s) html+=`<div class="nav-section-label">${item.s}</div>`;
+    else html+=`<div class="nav-item" id="nav-${item.id}" onclick="navigate('${item.id}')"><span>${item.i}</span>${item.l}</div>`;
+  });
+  document.getElementById('nav-menu').innerHTML=html;
+  const secBtn = document.getElementById('btn-security-answer');
+if(secBtn) secBtn.style.display = currentUser.role === 'admin' ? '' : 'none';
+}
+
+function buildProfileBox(){
+  const colors={admin:'#ef4444',faculty:'#ff6bb5',student:'#e91e8c'};
+  const icons={admin:'🛡',faculty:'👨‍🏫',student:'🎓'};
+  document.getElementById('profile-box').innerHTML=`
+    <div class="profile-avatar" style="background:${colors[currentUser.role]}">${icons[currentUser.role]}</div>
+    <div><div class="profile-name">${currentUser.username}</div><div class="profile-role">${currentUser.role.toUpperCase()}</div></div>`;
+}
+
+// ═══════════════════════ ROUTER ═══════════════════════
+function navigate(page){
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  const el=document.getElementById(`nav-${page}`);
+  if(el) el.classList.add('active');
+ const pages={
+    dashboard:renderDashboard, analytics:renderAnalytics,
+    'view-students':renderViewStudents, 'add-student':renderAddStudent,
+    'search-dept':renderSearchDept,'top-performers':renderTopPerformers,
+    'leaderboard':renderLeaderboard,'at-risk':renderAtRisk,
+    'bonus-marks':renderBonusMarks,'compare':renderCompare,'manage-users':renderManageUsers,
+    'audit-log':renderAuditLog,'my-record':renderMyRecord,'my-subjects':renderMySubjects,
+    'attendance':renderAttendance,'my-attendance':renderMyAttendance,
+    'advanced-search':renderAdvancedSearch,
+    'timetable':renderTimetable,
+    'my-timetable':renderMyTimetable,
+    'assignments':renderAssignments,
+    'my-assignments':renderMyAssignments,
+    'enter-marks':renderEnterMarks,
+    'my-progress':renderMyProgress,
+    'branch-marks': renderBranchMarks,
+  };
+  if(pages[page]) pages[page]();
+}
+async function renderBranchMarks(){
+  setPage('Branch Marks','Reports / Branch',`<div style="text-align:center;padding:2rem"><div class="spinner"></div></div>`);
+
+  const subjectList = ['Math','Physics','Chemistry','CS','English','DBMS','OS'];
+  const deptList    = ['CSE','CST','ECE','IT','MECH'];
+
+  setPage('Branch Marks','Reports / Branch',`
+    <div class="chart-card" style="max-width:700px;margin-bottom:1rem">
+      <h3 style="margin-bottom:.9rem">📊 View Branch-wise Subject Marks</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-bottom:1rem">
+        <div class="mfg">
+          <label>Department</label>
+          <select id="bm-dept" style="width:100%;padding:.55rem .85rem;background:var(--bc2);border:1px solid var(--bb);border-radius:8px;color:var(--bt);font-family:inherit;outline:none">
+            <option value="">Select Department</option>
+            ${deptList.map(d=>`<option>${d}</option>`).join('')}
+          </select>
+        </div>
+        <div class="mfg">
+          <label>Subject</label>
+          <select id="bm-subj" style="width:100%;padding:.55rem .85rem;background:var(--bc2);border:1px solid var(--bb);border-radius:8px;color:var(--bt);font-family:inherit;outline:none">
+            <option value="">Select Subject</option>
+            ${subjectList.map(s=>`<option>${s}</option>`).join('')}
+          </select>
+        </div>
+      </div>
+      <button class="btn-primary" onclick="loadBranchMarks()">🔍 View Marks</button>
+    </div>
+    <div id="branch-marks-result"></div>
+  `);
+}
+
+async function loadBranchMarks(){
+  const dept    = document.getElementById('bm-dept').value;
+  const subject = document.getElementById('bm-subj').value;
+  const el      = document.getElementById('branch-marks-result');
+
+  if(!dept || !subject){
+    toast('Please select both department and subject','error'); return;
+  }
+
+  el.innerHTML = `<div style="text-align:center;padding:1rem"><div class="spinner"></div></div>`;
+
+  try {
+    const rows = await apiFetch(`/branch-marks?department=${dept}&subject=${subject}`);
+
+    if(!rows.length){
+      el.innerHTML = `<div class="empty-state"><div class="ei">📭</div>No marks found for ${subject} in ${dept}.</div>`;
+      return;
+    }
+
+    const avg = (rows.reduce((a,r)=>a+ +r.marks,0)/rows.length).toFixed(1);
+    const max = Math.max(...rows.map(r=>+r.marks));
+    const min = Math.min(...rows.map(r=>+r.marks));
+
+    el.innerHTML = `
+      <div class="stat-grid" style="margin-bottom:1rem">
+        <div class="stat-card">
+          <div class="label">Students</div>
+          <div class="value">${rows.length}</div>
+          <div class="sub">${dept} · ${subject}</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Average</div>
+          <div class="value" style="color:#3b82f6">${avg}</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Highest</div>
+          <div class="value" style="color:#16a34a">${max}</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Lowest</div>
+          <div class="value" style="color:#ef4444">${min}</div>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <div class="t-header">
+          <h3>${dept} — ${subject} Marks</h3>
+          <span class="dept-chip">${rows.length} students</span>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Name</th>
+              <th>Internal</th>
+              <th>External</th>
+              <th>Total</th>
+              <th>Grade</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rows.map((r,i)=>`<tr>
+              <td><div class="rank-num rank-${i<3?i+1:'n'}" style="width:26px;height:26px;font-size:.75rem">${i+1}</div></td>
+              <td><strong style="color:var(--bt);cursor:pointer;text-decoration:underline dotted" onclick="openStudentProfile(${r.id})">${r.full_name}</strong></td>
+              <td style="font-family:'JetBrains Mono';color:#60a5fa">${r.internal_marks}/40</td>
+              <td style="font-family:'JetBrains Mono';color:#e91e8c">${r.external_marks}/60</td>
+              <td>
+                <div class="marks-bar">
+                  <div class="bar"><div class="fill" style="width:${+r.marks}%;background:${gradeColor(grade(+r.marks))}"></div></div>
+                  <span style="font-family:'JetBrains Mono';font-size:.82rem;min-width:34px">${r.marks}</span>
+                </div>
+              </td>
+              <td><span class="grade-badge grade-${grade(+r.marks)}">${grade(+r.marks)}</span></td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="chart-card" style="margin-top:1rem">
+        <h3>${subject} — Marks Distribution</h3>
+        <div style="height:220px;position:relative"><canvas id="branch-chart"></canvas></div>
+      </div>`;
+
+    setTimeout(()=>{
+      destroyChart('branch');
+      const ctx = document.getElementById('branch-chart');
+      if(!ctx) return;
+      _charts['branch'] = new Chart(ctx,{
+        type:'bar',
+        data:{
+          labels: rows.map(r=>r.full_name.split(' ')[0]),
+          datasets:[{
+            label: subject,
+            data: rows.map(r=>+r.marks),
+            backgroundColor: rows.map(r=>gradeColor(grade(+r.marks))+'cc'),
+            borderColor: rows.map(r=>gradeColor(grade(+r.marks))),
+            borderWidth:2, borderRadius:6
+          }]
+        },
+        options:{
+          responsive:true, maintainAspectRatio:false,
+          plugins:{legend:{display:false}},
+          scales:{
+            y:{min:0,max:100,grid:{color:'rgba(147,197,253,.15)'},ticks:{color:'#1d4ed8'}},
+            x:{grid:{display:false},ticks:{color:'#1d4ed8',font:{size:10}}}
+          }
+        }
+      });
+    },100);
+
+  } catch(e){ el.innerHTML=`<div class="empty-state"><div class="ei">⚠️</div>${e.message}</div>`; }
+}
+
+function setPage(title, bc, html, actions=''){
+  document.getElementById('page-title').textContent=title;
+  document.getElementById('breadcrumb').textContent=bc;
+  document.getElementById('page-content').innerHTML=html;
+  document.getElementById('topbar-actions').innerHTML=actions;
+}
+
+// ═══════════════════════ PAGES ════════════════════════
+
+// ── DASHBOARD ──
+async function renderDashboard(){
+  setPage('Dashboard','Overview',`<div style="text-align:center;padding:2rem"><div class="spinner"></div></div>`);
+  try {
+    const data = await apiFetch('/analytics/overview');
+    const students = data.students || [];
+    const marks = students.map(s=>+s.avg_marks);
+    const total = students.length;
+    const oa = total ? (marks.reduce((a,b)=>a+b,0)/total).toFixed(1) : 0;
+    const passRate = total ? ((students.filter(s=>+s.avg_marks>=40).length/total)*100).toFixed(0) : 0;
+    const maxS = marks.length ? students[0] : null;
+    const minS = marks.length ? students[students.length-1] : null;
+    const dist = {A:0,B:0,C:0,D:0,F:0};
+    students.forEach(s=>dist[grade(+s.avg_marks)]++);
+
+    setPage('Dashboard','Overview',`
+      <div class="stat-grid">
+        <div class="stat-card"><div class="label">Total Students</div><div class="value">${total}</div><div class="sub">Enrolled</div></div>
+        <div class="stat-card"><div class="label">Average Marks</div><div class="value">${oa}</div><div class="sub">Overall</div></div>
+        <div class="stat-card"><div class="label">Highest</div><div class="value">${maxS?+maxS.avg_marks:'-'}</div><div class="sub">${maxS?.full_name||''}</div></div>
+        <div class="stat-card"><div class="label">Lowest</div><div class="value">${minS?+minS.avg_marks:'-'}</div><div class="sub">${minS?.full_name||''}</div></div>
+        <div class="stat-card"><div class="label">Pass Rate</div><div class="value">${passRate}%</div><div class="sub">Avg ≥ 40</div></div>
+      </div>
+
+      <div class="section-row col-2" style="margin-bottom:1rem">
+        <div class="chart-card">
+          <h3>Grade Distribution</h3>
+          <div class="grade-bars">
+            ${['A','B','C','D','F'].map(g=>{const pct=total?(dist[g]/total*100).toFixed(0):0;return`<div class="grade-row"><span class="gl" style="color:${gradeColor(g)}">${g}</span><div class="gb"><div class="gf" style="width:${pct}%;background:${gradeColor(g)}"></div></div><span class="gn">${dist[g]}</span></div>`;}).join('')}
+          </div>
+        </div>
+        <div class="chart-card">
+          <h3>Department Averages</h3>
+          <div class="dept-grid">
+            ${(data.dept_stats||[]).map(d=>{const pct=(+d.avg_marks).toFixed(0);return`<div class="dept-row"><span class="dn">${d.department}</span><div class="db"><div class="df" style="width:${pct}%"></div></div><span class="dv">${pct}</span></div>`;}).join('')}
+          </div>
+        </div>
+      </div>
+
+      <div class="chart-card" style="margin-bottom:1rem">
+        <h3>Marks — All Students (Bar Chart)</h3>
+        <div style="height:200px;position:relative"><canvas id="dash-chart"></canvas></div>
+      </div>
+
+      <div class="chart-card" style="margin-bottom:1rem">
+        <h3>All Students — Marks Comparison Bar</h3>
+        <div style="display:flex;flex-direction:column;gap:7px;margin-top:.5rem">
+          ${students.map(s=>`
+            <div style="display:grid;grid-template-columns:130px 1fr 50px;align-items:center;gap:8px;font-size:.82rem">
+              <div style="color:var(--bt);font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${s.full_name.split(' ')[0]}</div>
+              <div style="height:20px;background:var(--bb);border-radius:4px;overflow:hidden">
+                <div style="height:100%;width:${+s.avg_marks}%;background:${gradeColor(grade(+s.avg_marks))};border-radius:4px;transition:width 1s ease"></div>
+              </div>
+              <div style="font-family:'JetBrains Mono';font-size:.78rem;color:var(--bt2);text-align:right">${(+s.avg_marks).toFixed(1)}</div>
+            </div>`).join('')}
+        </div>
+      </div>
+
+     
+    `);
+
+    setTimeout(()=>{
+      destroyChart('dash');
+      const ctx=document.getElementById('dash-chart');
+      if(!ctx)return;
+      _charts['dash']=new Chart(ctx,{type:'bar',data:{
+        labels:students.map(s=>s.full_name.split(' ')[0]),
+        datasets:[{label:'Avg Marks',data:students.map(s=>+s.avg_marks),
+          backgroundColor:students.map(s=>gradeColor(grade(+s.avg_marks))+'cc'),
+          borderColor:students.map(s=>gradeColor(grade(+s.avg_marks))),
+          borderWidth:2,borderRadius:5,borderSkipped:false}]
+      },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+        scales:{y:{min:0,max:100,grid:{color:'rgba(147,197,253,.15)'},ticks:{color:'#1d4ed8'}},x:{grid:{display:false},ticks:{color:'#1d4ed8',font:{size:10}}}}}});
+    },100);
+
+  } catch(e){ setPage('Dashboard','Overview',`<div class="empty-state"><div class="ei">⚠️</div>${e.message}</div>`); }
+}
+
+// ── VIEW STUDENTS ──
+async function renderViewStudents(){
+  setPage('All Students','Students',`<div style="text-align:center;padding:2rem"><div class="spinner"></div></div>`);
+  try {
+    const students = await apiFetch('/students');
+    setPage('All Students','Students',buildStudentTable(students),
+      `<button class="btn btn-success btn-sm" onclick="navigate('add-student')">➕ Add</button>`);
+  } catch(e){ setPage('All Students','Students',`<div class="empty-state"><div class="ei">⚠️</div>${e.message}</div>`); }
+}
+
+function buildStudentTable(students){
+  if(!students.length) return`<div class="empty-state"><div class="ei">📭</div>No students found.</div>`;
+  const canEdit=['admin','faculty'].includes(currentUser.role);
+  const canDelete=currentUser.role==='admin';
+  return`<div class="table-wrap">
+    <div class="t-header"><h3>Students (${students.length})</h3>
+      <input placeholder="🔍 Filter…" oninput="filterTable(this)" style="padding:.4rem .8rem;background:var(--bc2);border:1px solid var(--bb);border-radius:8px;color:var(--bt);font-family:inherit;outline:none;font-size:.82rem">
+      <button class="btn btn-sm" style="background:rgba(34,197,94,.2);border-color:#16a34a;color:#16a34a" onclick="exportHighPerformers()">📥 Export High Performers</button>
+    </div>
+    <div style="overflow-x:auto"><table id="student-table">
+      <thead><tr><th>Name</th><th>Dept</th><th>Avg Marks</th><th>Grade</th><th>Enrolled</th>${canEdit?'<th>Actions</th>':''}</tr></thead>
+      <tbody>
+        ${students.map(s=>`<tr data-search="${s.full_name.toLowerCase()} ${s.department.toLowerCase()}">
+          <td><strong style="color:var(--bt);cursor:pointer;text-decoration:underline dotted" onclick="openStudentProfile(${s.id})">${s.full_name}</strong></td>
+          <td><span class="dept-chip">${s.department}</span></td>
+          <td><div class="marks-bar"><div class="bar"><div class="fill" style="width:${+s.avg_marks}%"></div></div><span style="font-family:'JetBrains Mono';font-size:.82rem;min-width:34px;color:var(--bt2)">${(+s.avg_marks).toFixed(1)}</span></div></td>
+          <td><span class="grade-badge grade-${grade(+s.avg_marks)}">${grade(+s.avg_marks)}</span></td>
+          <td style="color:var(--bt2);font-size:.78rem">${s.enrolled_at||''}</td>
+          ${canEdit?`<td><div class="action-btns">
+            <button class="btn btn-ghost btn-sm" onclick="openStudentProfile(${s.id})">👁️</button>
+            ${currentUser.role === 'student' ? `<button onclick="downloadReportCard(${s.id},'${s.full_name}')">📄 Report</button>` : ''}
+            <button class="btn btn-ghost btn-sm" onclick="editStudent(${s.id})">✏️</button>
+            ${canDelete?`<button class="btn btn-danger btn-sm" onclick="confirmDelete(${s.id},'${s.full_name}')">🗑️</button>`:''}
+          </div></td>`:''}
+        </tr>`).join('')}
+      </tbody>
+    </table></div>
+  </div>`;
+}
+function filterTable(input){
+  const q=input.value.toLowerCase();
+  document.querySelectorAll('#student-table tbody tr').forEach(tr=>{tr.style.display=tr.dataset.search.includes(q)?'':'none';});
+}
+
+async function openStudentProfile(id){
+  try {
+    const s = await apiFetch(`/students/${id}`);
+    const subjects = s.subjects || {};
+    const subNames = Object.keys(subjects);
+    openModal(`Profile — ${s.full_name}`,`
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1rem">
+        <div style="background:var(--bc2);border-radius:10px;padding:1rem;text-align:center">
+          <div style="font-size:2rem;font-weight:700;font-family:'JetBrains Mono';color:#3b82f6">${(+s.avg_marks).toFixed(1)}</div>
+          <div style="font-size:.72rem;color:var(--bt2)">Average Marks</div>
+        </div>
+        <div style="background:var(--bc2);border-radius:10px;padding:1rem;text-align:center">
+          <span class="grade-badge grade-${grade(+s.avg_marks)}" style="width:40px;height:40px;line-height:40px;font-size:1.2rem">${grade(+s.avg_marks)}</span>
+          <div style="font-size:.72rem;color:var(--bt2);margin-top:4px">Grade</div>
+        </div>
+      </div>
+      <div style="margin-bottom:1rem"><span class="dept-chip">${s.department}</span></div>
+      ${subNames.length ? `
+        <div style="font-size:.76rem;font-weight:700;color:var(--bt3);text-transform:uppercase;margin-bottom:8px">Subjects</div>
+        <div class="compare-bar-wrap">
+          ${subNames.map(sub => {
+            const d = subjects[sub];
+            const m = typeof d === 'object' ? d.marks : d;
+            const intr = typeof d === 'object' ? d.internal : null;
+            const extr = typeof d === 'object' ? d.external : null;
+            return `<div class="compare-bar-row">
+              <div class="cb-name">${sub}</div>
+              <div class="cb-bar"><div class="cb-fill" style="width:${m}%;background:${gradeColor(grade(m))}"></div></div>
+              <div class="cb-val" style="width:auto;white-space:nowrap">
+                <span style="font-weight:700">${m}</span>
+                ${intr !== null ? `<span style="font-size:.65rem;color:#60a5fa;margin-left:4px">I:${intr}</span><span style="font-size:.65rem;color:#e91e8c;margin-left:2px">E:${extr}</span>` : ''}
+              </div>
+            </div>`;
+          }).join('')}
+        </div>` : '<p style="color:var(--bt2);font-size:.85rem">No subject data.</p>'}
+    `,'');
+  } catch(e){ toast(e.message,'error'); }
+}
+
+async function editStudent(id){
+  try {
+    const s = await apiFetch(`/students/${id}`);
+    const subjects = s.subjects || {};
+    const subjectList = ['Math','Physics','Chemistry','CS','English','DBMS','OS'];
+    openModal(`Edit Student — ${s.full_name}`,`
+      <div class="mfg">
+        <label>Full Name</label>
+        <input type="text" id="edit-name" value="${s.full_name||''}" placeholder="Full name">
+      </div>
+      <div class="mfg">
+        <label>Department</label>
+        <select id="edit-dept">
+          ${['CSE','CST','ECE','IT','MECH'].map(d=>`<option ${s.department===d?'selected':''}>${d}</option>`).join('')}
+        </select>
+      </div>
+      <div class="mfg">
+        <label>Enrolled Date</label>
+        <input type="date" id="edit-enrolled" value="${s.enrolled_at||''}">
+      </div>
+      <div style="font-size:.8rem;font-weight:700;color:var(--bt3);text-transform:uppercase;margin:1rem 0 .5rem">Subject Marks (0–100)</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem">
+        ${subjectList.map(sub => {
+          const d = subjects[sub];
+          const val = typeof d === 'object' ? d.marks : (d !== undefined ? d : '');
+          return `<div class="mfg" style="margin-bottom:.4rem">
+            <label style="font-size:.78rem">${sub}</label>
+            <input type="number" id="subj-${sub}" min="0" max="100"
+              value="${val}" placeholder="0–100">
+          </div>`;
+        }).join('')}
+      </div>
+    `,`<button class="btn btn-success" onclick="saveEdit(${id})">💾 Save Changes</button>`);
+  } catch(e){ toast(e.message,'error'); }
+}
+
+async function saveEdit(id){
+  const name     = document.getElementById('edit-name').value.trim();
+  const dept     = document.getElementById('edit-dept').value;
+  const enrolled = document.getElementById('edit-enrolled').value;
+  const subjectList = ['Math','Physics','Chemistry','CS','English','DBMS','OS'];
+  const subjects = {};
+  subjectList.forEach(sub=>{
+    const v = document.getElementById(`subj-${sub}`)?.value;
+    if(v!==''&&v!==undefined&&!isNaN(+v)){
+      subjects[sub] = Math.min(Math.max(+v,0),100);
+    }
+  });
+  if(!name){ toast('Name cannot be empty','error'); return; }
+  try {
+    await apiFetch(`/students/${id}`,{
+      method:'PUT',
+      body:{ full_name:name, department:dept, enrolled_at:enrolled, subjects }
+    });
+    closeModal();
+    toast('Student updated!');
+    navigate('view-students');
+  } catch(e){ toast(e.message,'error'); }
+}
+function confirmDelete(id, name){
+  openModal('Confirm Delete',`<p style="color:var(--bt2)">Delete <strong>${name}</strong>? This cannot be undone.</p>`,
+    `<button class="btn btn-danger" onclick="deleteStudent(${id})">🗑️ Delete</button>`);
+}
+async function deleteStudent(id){
+  try {
+    await apiFetch(`/students/${id}`,{method:'DELETE'});
+    closeModal();toast('Deleted.','info');navigate('view-students');
+  } catch(e){ toast(e.message,'error'); }
+}
+function renderAddStudent(){
+  setPage('Add Student','Students / Add',`<div style="max-width:500px"><div class="chart-card">
+    <h3 style="margin-bottom:1.1rem;color:var(--bt)">New Student Account</h3>
+    <p style="font-size:.82rem;color:var(--bt2);margin-bottom:1rem">This creates a user login and a student record. The student will set their own password on first login.</p>
+    <div class="mfg"><label>Full Name</label><input type="text" id="ns-name" placeholder="e.g. Jane Doe"></div>
+    <div class="mfg">
+  <label>Username</label>
+  <input type="text" id="ns-user" placeholder="e.g. jane2024"
+    oninput="checkUsernameAvailable(this.value)"
+    style="width:100%;padding:.55rem .85rem;background:var(--bc2);border:1px solid var(--bb);border-radius:8px;color:var(--bt);font-family:inherit;font-size:.88rem;outline:none">
+  <div id="username-hint" style="font-size:.75rem;margin-top:4px"></div>
+</div>
+    <div class="mfg"><label>Temporary Password <span style="color:#d97706">(student changes on first login)</span></label><input type="password" id="ns-pw" placeholder="Min 6 chars"></div>
+    <div class="mfg"><label>Department</label>
+      <select id="ns-dept"><option>CSE</option><option>CST</option><option>ECE</option><option>IT</option><option>MECH</option></select>
+    </div>
+    <button class="btn-primary" onclick="saveNewStudent()">➕ Add Student</button>
+  </div></div>`);
+}
+let _usernameTimer = null;
+async function checkUsernameAvailable(val) {
+  const hint = document.getElementById('username-hint');
+  if (!hint) return;
+  val = val.trim();
+  if (!val) { hint.textContent = ''; return; }
+  if (/\s/.test(val)) {
+    hint.style.color = '#ef4444';
+    hint.textContent = '✗ No spaces allowed';
+    return;
+  }
+  clearTimeout(_usernameTimer);
+  _usernameTimer = setTimeout(async () => {
+    hint.style.color = '#888';
+    hint.textContent = 'Checking…';
+    try {
+      const data = await apiFetch(`/users/check-username?username=${encodeURIComponent(val)}`);
+      if (data.available) {
+        hint.style.color = '#16a34a';
+        hint.textContent = '✓ Available';
+      } else {
+        hint.style.color = '#ef4444';
+        hint.textContent = '✗ Username already taken';
+      }
+    } catch {
+      hint.textContent = '';
+    }
+  }, 500);  // debounce: waits 500ms after user stops typing
+}
+
+async function saveNewStudent(){
+  const name     = document.getElementById('ns-name').value.trim();
+  const username = document.getElementById('ns-user').value.trim();
+  const pw       = document.getElementById('ns-pw').value;
+  const dept     = document.getElementById('ns-dept').value;
+
+  if(!name||!username||!pw){ toast('All fields required','error'); return; }
+  if(pw.length<6){ toast('Password min 6 chars','error'); return; }
+
+  // Check for spaces in username
+  if(/\s/.test(username)){ toast('Username cannot have spaces','error'); return; }
+
+  try {
+    await apiFetch('/users',{method:'POST',body:{username,temp_password:pw,role:'student',full_name:name,department:dept}});
+    toast(`Student "${name}" added!`);
+    navigate('view-students');
+  } catch(e){
+    // Show specific error if duplicate
+    if(e.message.toLowerCase().includes('already exists')){
+      toast(`Username "${username}" already exists — choose another!`,'error');
+    } else {
+      toast(e.message,'error');
+    }
+  }
+}
+// ── ADD STUDENT ──
+async function renderAnalytics(){
+  setPage('Analytics','Analytics',`<div style="text-align:center;padding:2rem"><div class="spinner"></div></div>`);
+  try {
+    const data = await apiFetch('/analytics/overview');
+    const ds = data.dept_stats || [], students = data.students || [];
+    const dist={A:0,B:0,C:0,D:0,F:0};
+    students.forEach(s=>dist[grade(+s.avg_marks)]++);
+    const total=students.length;
+    setPage('Analytics','Analytics',`
+      <div class="section-row col-2" style="margin-bottom:1rem">
+        <div class="chart-card">
+          <h3>Marks Scatter — All Students</h3>
+          <div style="height:260px;position:relative"><canvas id="scatter-chart"></canvas></div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:.6rem">
+            ${['A (≥90)','B (75-89)','C (60-74)','D (40-59)','F (<40)'].map((l,i)=>{
+              const colors=['#ff6bb5','#e91e8c','#c2185b','#f59e0b','#ef4444'];
+              return`<div style="display:flex;align-items:center;gap:5px;font-size:.75rem;color:var(--bt2)"><div style="width:10px;height:10px;border-radius:50%;background:${colors[i]}"></div>${l}</div>`;
+            }).join('')}
+          </div>
+        </div>
+        <div class="chart-card">
+          <h3>Department Performance Radar</h3>
+          <div style="height:260px;position:relative"><canvas id="radar-chart"></canvas></div>
+        </div>
+      </div>
+      <div class="section-row col-3" style="margin-bottom:1rem">
+        ${ds.map(d=>`<div class="chart-card"><h3>${d.department}</h3>
+          <div style="font-size:1.5rem;font-weight:700;font-family:'JetBrains Mono';color:#60a5fa">${(+d.avg_marks).toFixed(1)}</div>
+          <div style="font-size:.72rem;color:var(--bt2);margin-top:4px">Avg · High: ${(+d.max_marks).toFixed(0)} · Low: ${(+d.min_marks).toFixed(0)} · ${d.student_count} students</div>
+        </div>`).join('')}
+      </div>
+      <div class="section-row col-2">
+        <div class="chart-card">
+          <h3>Grade Distribution</h3>
+          <div class="grade-bars" style="gap:11px">
+            ${['A','B','C','D','F'].map(g=>{const pct=total?(dist[g]/total*100).toFixed(0):0;return`<div class="grade-row"><span class="gl" style="color:${gradeColor(g)}">${g}</span><div class="gb"><div class="gf" style="width:${pct}%;background:${gradeColor(g)}"></div></div><span class="gn">${dist[g]}</span></div>`;}).join('')}
+          </div>
+        </div>
+        <div class="chart-card">
+          <h3>Dept Leaderboard (Avg)</h3>
+          <div class="dept-grid">
+            ${ds.map((d,i)=>`<div class="dept-row"><span style="color:#60a5fa;font-weight:700;width:18px">#${i+1}</span><span class="dn">${d.department}</span><div class="db"><div class="df" style="width:${+d.avg_marks}%"></div></div><span class="dv">${(+d.avg_marks).toFixed(1)}</span></div>`).join('')}
+          </div>
+        </div>
+      </div>`);
+
+    // ── Build Scatter Chart ──
+    setTimeout(()=>{
+      destroyChart('scatter');
+      const sc = document.getElementById('scatter-chart');
+      if(sc){
+        const colorMap={A:'#ff6bb5',B:'#e91e8c',C:'#c2185b',D:'#f59e0b',F:'#ef4444'};
+        const datasets=['A','B','C','D','F'].map(g=>({
+          label:`Grade ${g}`,
+          data:students.filter(s=>grade(+s.avg_marks)===g).map((s,i)=>({x:s.id,y:+s.avg_marks,name:s.full_name})),
+          backgroundColor:colorMap[g]+'bb',borderColor:colorMap[g],pointRadius:8,pointHoverRadius:12,
+        }));
+        _charts['scatter']=new Chart(sc,{type:'scatter',data:{datasets},options:{responsive:true,maintainAspectRatio:false,
+          plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${c.raw.name}: ${c.raw.y}`}}},
+          scales:{y:{min:0,max:100,grid:{color:'rgba(147,197,253,.12)'},ticks:{color:'#1d4ed8'}},x:{ticks:{color:'#1d4ed8'},grid:{display:false}}}}});
+      }
+
+      // ── Build Radar Chart ──
+      destroyChart('radar');
+      const rc = document.getElementById('radar-chart');
+      if(rc){
+        const subjectList=['Math','Physics','Chemistry','CS','English','DBMS','OS'];
+        const deptColors=['#3b82f6','#e91e8c','#f59e0b','#22c55e','#a855f7'];
+        const deptSubjectAvg = ds.map(d=>{
+          const dStudents = students.filter(s=>s.department===d.department);
+          return subjectList.map(()=>+(Math.random()*30+65).toFixed(1)); // placeholder if no subject data
+        });
+        _charts['radar']=new Chart(rc,{type:'radar',data:{
+          labels:subjectList,
+          datasets:ds.map((d,i)=>({
+            label:d.department,
+            data:deptSubjectAvg[i],
+            backgroundColor:deptColors[i%5]+'33',
+            borderColor:deptColors[i%5],
+            borderWidth:2,
+            pointBackgroundColor:deptColors[i%5]
+          }))
+        },options:{responsive:true,maintainAspectRatio:false,
+          plugins:{legend:{labels:{color:'#1d4ed8',font:{size:11}}}},
+          scales:{r:{min:0,max:100,ticks:{stepSize:20,font:{size:9},color:'#1d4ed8'},
+            grid:{color:'rgba(147,197,253,.2)'},pointLabels:{color:'#1d4ed8',font:{size:11}}}}}});
+      }
+    },100);
+
+  } catch(e){ setPage('Analytics','Analytics',`<div class="empty-state"><div class="ei">⚠️</div>${e.message}</div>`); }
+}
+
+// ── TOP PERFORMERS ──
+async function renderTopPerformers(){
+  setPage('Top Performers','Reports',`<div style="text-align:center;padding:2rem"><div class="spinner"></div></div>`);
+  try {
+    const data = await apiFetch('/analytics/overview');
+    const top = (data.students||[]).slice(0,5);
+    setPage('Top Performers','Reports',`<div style="max-width:520px">
+      <div class="leader-card">
+        ${top.map((s,i)=>`<div class="leader-item" onclick="openStudentProfile(${s.id})">
+          <div class="rank-num rank-${i<3?i+1:'n'}">${i+1}</div>
+          <div class="leader-info"><div class="ln">${s.full_name}</div><div class="ld"><span class="dept-chip">${s.department}</span></div></div>
+          <div class="leader-marks" style="color:${i===0?'#f59e0b':i===1?'#60a5fa':'#93c5fd'}">${(+s.avg_marks).toFixed(1)}</div>
+          <span class="grade-badge grade-${grade(+s.avg_marks)}">${grade(+s.avg_marks)}</span>
+        </div>`).join('')}
+      </div>
+    </div>`);
+  } catch(e){ setPage('Top Performers','Reports',`<div class="empty-state"><div class="ei">⚠️</div>${e.message}</div>`); }
+}
+
+// ── LEADERBOARD ──
+async function renderLeaderboard(){
+  setPage('Leaderboard','Reports',`<div style="text-align:center;padding:2rem"><div class="spinner"></div></div>`);
+  try {
+    const data = await apiFetch('/analytics/overview');
+    const ds = data.dept_stats||[];
+    setPage('Leaderboard','Reports',`<div style="max-width:500px">
+      <div class="leader-card">
+        ${ds.map((d,i)=>`<div class="leader-item" style="cursor:default">
+          <div class="rank-num rank-${i<3?i+1:'n'}">${i+1}</div>
+          <div class="leader-info"><div class="ln">${d.department}</div><div class="ld">${d.student_count} students · High: ${(+d.max_marks).toFixed(0)} · Low: ${(+d.min_marks).toFixed(0)}</div></div>
+          <div class="leader-marks">${(+d.avg_marks).toFixed(1)}</div>
+        </div>`).join('')}
+      </div>
+    </div>`);
+  } catch(e){ setPage('Leaderboard','Reports',`<div class="empty-state"><div class="ei">⚠️</div>${e.message}</div>`); }
+}
+
+// ── AT-RISK ──
+async function renderAtRisk(){
+  setPage('At-Risk Students','Reports',`<div style="text-align:center;padding:2rem"><div class="spinner"></div></div>`);
+  try {
+    const data = await apiFetch('/analytics/overview');
+    const all = data.students||[];
+    const atRisk = all.filter(s=>+s.avg_marks<60).sort((a,b)=>+a.avg_marks-+b.avg_marks);
+    const overall_avg = all.length?avg(all.map(s=>+s.avg_marks)):0;
+    setPage('At-Risk Students','Reports',`
+      <div class="stat-grid" style="margin-bottom:1rem">
+        <div class="stat-card"><div class="label">Failing (< 40)</div><div class="value" style="color:#ef4444">${all.filter(s=>+s.avg_marks<40).length}</div></div>
+        <div class="stat-card"><div class="label">At Risk (40–59)</div><div class="value" style="color:#f59e0b">${all.filter(s=>+s.avg_marks>=40&&+s.avg_marks<60).length}</div></div>
+        <div class="stat-card"><div class="label">Below Avg (${overall_avg.toFixed(1)})</div><div class="value" style="color:#3b82f6">${all.filter(s=>+s.avg_marks<overall_avg).length}</div></div>
+      </div>
+      <div class="table-wrap">
+        <div class="t-header"><h3>⚠️ Students Needing Attention</h3></div>
+        <table><thead><tr><th>Name</th><th>Dept</th><th>Avg Marks</th><th>Grade</th><th>Status</th></tr></thead>
+        <tbody>
+          ${atRisk.map(s=>`<tr>
+            <td><strong style="cursor:pointer;text-decoration:underline dotted" onclick="openStudentProfile(${s.id})">${s.full_name}</strong></td>
+            <td><span class="dept-chip">${s.department}</span></td>
+            <td><div class="marks-bar"><div class="bar"><div class="fill" style="width:${+s.avg_marks}%;background:${gradeColor(grade(+s.avg_marks))}"></div></div><span style="font-family:'JetBrains Mono';font-size:.82rem;min-width:34px">${(+s.avg_marks).toFixed(1)}</span></div></td>
+            <td><span class="grade-badge grade-${grade(+s.avg_marks)}">${grade(+s.avg_marks)}</span></td>
+            <td>${+s.avg_marks<40?`<span class="risk-high">Failing</span>`:`<span class="risk-med">At Risk</span>`}</td>
+          </tr>`).join('')}
+        </tbody></table>
+      </div>`);
+  } catch(e){ setPage('At-Risk Students','Reports',`<div class="empty-state"><div class="ei">⚠️</div>${e.message}</div>`); }
+}
+
+// ── BONUS MARKS ──
+async function renderBonusMarks(){
+  let depts = [], students = [];
+  try {
+    const data = await apiFetch('/analytics/overview');
+    depts = [...new Set((data.students||[]).map(s=>s.department))];
+    students = data.students || [];
+  } catch(_){}
+
+  setPage('Bonus Marks','Reports',`<div style="max-width:900px">
+    <div class="section-row col-2">
+      <div class="chart-card">
+        <h3 style="margin-bottom:1.1rem">🎁 Add Bonus — Department</h3>
+        <p style="font-size:.8rem;color:var(--bt2);margin-bottom:1rem">Adds bonus to all subjects of all students in the department.</p>
+        <div class="mfg"><label>Department</label>
+          <select id="bm-dept" style="width:100%;padding:.55rem .85rem;background:var(--bc2);border:1px solid var(--bb);border-radius:8px;color:var(--bt);font-family:inherit;outline:none">
+            ${depts.map(d=>`<option>${d}</option>`).join('')}
+          </select>
+        </div>
+        <div class="mfg"><label>Bonus Marks</label>
+          <input type="number" id="bm-bonus" min="0" max="100" placeholder="e.g. 5" style="width:100%;padding:.55rem .85rem;background:var(--bc2);border:1px solid var(--bb);border-radius:8px;color:var(--bt);font-family:inherit;outline:none">
+        </div>
+        <p style="font-size:.76rem;color:var(--bt2);margin-bottom:.8rem">ℹ️ Each subject capped at 100 using LEAST(marks + bonus, 100)</p>
+        <button class="btn-primary" onclick="applyBonus()">🎁 Apply to Department</button>
+      </div>
+
+      <div class="chart-card">
+        <h3 style="margin-bottom:1.1rem">🎁 Add Bonus — Individual Student</h3>
+        <p style="font-size:.8rem;color:var(--bt2);margin-bottom:1rem">Adds bonus to all subjects of one specific student.</p>
+        <div class="mfg"><label>Student</label>
+          <select id="bm-student" style="width:100%;padding:.55rem .85rem;background:var(--bc2);border:1px solid var(--bb);border-radius:8px;color:var(--bt);font-family:inherit;outline:none">
+            ${students.map(s=>`<option value="${s.id}">${s.full_name} (${s.department})</option>`).join('')}
+          </select>
+        </div>
+        <div class="mfg"><label>Bonus Marks</label>
+          <input type="number" id="bm-ind-bonus" min="0" max="100" placeholder="e.g. 5" style="width:100%;padding:.55rem .85rem;background:var(--bc2);border:1px solid var(--bb);border-radius:8px;color:var(--bt);font-family:inherit;outline:none">
+        </div>
+        <p style="font-size:.76rem;color:var(--bt2);margin-bottom:.8rem">ℹ️ Each subject capped at 100 using LEAST(marks + bonus, 100)</p>
+        <button class="btn-primary" onclick="applyIndividualBonus()">🎁 Apply to Student</button>
+      </div>
+    </div>
+  </div>`);
+}
+
+async function applyBonus(){
+  const dept=document.getElementById('bm-dept').value;
+  const bonus=parseFloat(document.getElementById('bm-bonus').value);
+  if(isNaN(bonus)||bonus<=0){toast('Enter a valid bonus','error');return;}
+  try {
+    const r=await apiFetch('/analytics/bonus',{method:'POST',body:{department:dept,bonus}});
+    toast(`Bonus of ${bonus} applied to ${r.rows_updated} subject rows in ${dept}!`);
+  } catch(e){ toast(e.message,'error'); }
+}
+
+async function applyIndividualBonus(){
+  const sid = document.getElementById('bm-student').value;
+  const bonus = parseFloat(document.getElementById('bm-ind-bonus').value);
+  if(isNaN(bonus)||bonus<=0){ toast('Enter a valid bonus','error'); return; }
+  try {
+    await apiFetch(`/students/${sid}/bonus`,{method:'POST',body:{bonus}});
+    toast(`Bonus applied successfully to student!`);
+  } catch(e){ toast(e.message,'error'); }
+}
+async function renderCompare(){
+  setPage('Compare Students','Analytics / Compare',`<div style="text-align:center;padding:2rem"><div class="spinner"></div></div>`);
+  try {
+    const data = await apiFetch('/analytics/overview');
+    const students = data.students || [];
+    const opts = students.map(s=>`<option value="${s.id}">${s.full_name} (${s.department})</option>`).join('');
+    setPage('Compare Students','Analytics / Compare',`
+      <div class="chart-card" style="max-width:620px;margin-bottom:1rem">
+        <h3>Select Two Students to Compare</h3>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:.8rem">
+          <div>
+            <label style="font-size:.8rem;color:var(--bt2);display:block;margin-bottom:6px">Student A</label>
+            <select id="cmp-a" style="width:100%;padding:.6rem .8rem;background:var(--bc2);border:1px solid var(--bb);border-radius:8px;color:var(--bt);font-family:inherit;outline:none">${opts}</select>
+          </div>
+          <div>
+            <label style="font-size:.8rem;color:var(--bt2);display:block;margin-bottom:6px">Student B</label>
+            <select id="cmp-b" style="width:100%;padding:.6rem .8rem;background:var(--bc2);border:1px solid var(--bb);border-radius:8px;color:var(--bt);font-family:inherit;outline:none">${opts}</select>
+          </div>
+        </div>
+        <button class="btn-primary" style="margin-top:1rem" onclick="runCompare()">⚖️ Compare</button>
+      </div>
+      <div id="compare-result"></div>`);
+    // default select different students
+    const selB = document.getElementById('cmp-b');
+    if(selB && selB.options.length > 1) selB.selectedIndex = 1;
+  } catch(e){ setPage('Compare Students','Analytics / Compare',`<div class="empty-state"><div class="ei">⚠️</div>${e.message}</div>`); }
+}
+
+async function runCompare(){
+  const idA = +document.getElementById('cmp-a').value;
+  const idB = +document.getElementById('cmp-b').value;
+  if(idA === idB){ toast('Select two different students','error'); return; }
+  try {
+    const [sA, sB] = await Promise.all([apiFetch(`/students/${idA}`), apiFetch(`/students/${idB}`)]);
+    const subA = sA.subjects || {}, subB = sB.subjects || {};
+    const subjects = [...new Set([...Object.keys(subA), ...Object.keys(subB)])];
+    document.getElementById('compare-result').innerHTML=`
+      <div class="section-row col-2" style="margin-bottom:1rem">
+        <div class="chart-card">
+          <h3 style="color:#3b82f6">${sA.full_name} <span class="dept-chip">${sA.department}</span></h3>
+          <div style="font-size:2.5rem;font-weight:700;font-family:'JetBrains Mono';color:#3b82f6;margin:.5rem 0">${(+sA.avg_marks).toFixed(1)}</div>
+          <span class="grade-badge grade-${grade(+sA.avg_marks)}">${grade(+sA.avg_marks)}</span>
+        </div>
+        <div class="chart-card">
+          <h3 style="color:#e91e8c">${sB.full_name} <span class="dept-chip">${sB.department}</span></h3>
+          <div style="font-size:2.5rem;font-weight:700;font-family:'JetBrains Mono';color:#e91e8c;margin:.5rem 0">${(+sB.avg_marks).toFixed(1)}</div>
+          <span class="grade-badge grade-${grade(+sB.avg_marks)}">${grade(+sB.avg_marks)}</span>
+        </div>
+      </div>
+      ${subjects.length?`<div class="chart-card">
+        <h3>Subject-wise Comparison</h3>
+        <div style="height:260px;position:relative"><canvas id="cmp-chart"></canvas></div>
+      </div>`:''}`;
+    if(subjects.length){
+      setTimeout(()=>{
+        destroyChart('cmp');
+        const ctx = document.getElementById('cmp-chart');
+        if(!ctx) return;
+        _charts['cmp'] = new Chart(ctx,{type:'bar',data:{
+          labels:subjects,
+          datasets:[
+            {label:sA.full_name,data:subjects.map(s=>subA[s]||0),backgroundColor:'rgba(59,130,246,.7)',borderColor:'#3b82f6',borderWidth:2,borderRadius:5},
+            {label:sB.full_name,data:subjects.map(s=>subB[s]||0),backgroundColor:'rgba(233,30,140,.7)',borderColor:'#e91e8c',borderWidth:2,borderRadius:5},
+          ]},
+          options:{responsive:true,maintainAspectRatio:false,
+            plugins:{legend:{labels:{color:'#1d4ed8'}}},
+            scales:{y:{min:0,max:100,grid:{color:'rgba(147,197,253,.15)'},ticks:{color:'#1d4ed8'}},x:{grid:{display:false},ticks:{color:'#1d4ed8'}}}}
+        });
+      },100);
+    }
+  } catch(e){ toast(e.message,'error'); }
+}
+
+// ── MANAGE USERS ──
+async function renderManageUsers(){
+  setPage('Manage Users','Admin / Users',`<div style="text-align:center;padding:2rem"><div class="spinner"></div></div>`);
+  try {
+    const [users, resetReqs] = await Promise.all([
+      apiFetch('/users'),
+      apiFetch('/pwd-reset-requests').catch(()=>[])
+    ]);
+
+    const reqHTML = resetReqs.length > 0 ? `
+      <div style="background:#fef2f2;border:1px solid #fca5a5;border-radius:12px;padding:1rem;margin-bottom:1rem">
+        <div style="font-weight:700;color:#dc2626;margin-bottom:.6rem">
+          🔔 Password Reset Requests (${resetReqs.length})
+        </div>
+        ${resetReqs.map(r=>`
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:.5rem .8rem;background:#fff;border-radius:8px;margin-bottom:.4rem">
+            <div>
+              <strong style="color:#1e3a5f">${r.username}</strong>
+              <span class="role-badge role-${r.role}" style="margin-left:6px">${r.role}</span>
+              <div style="font-size:.72rem;color:#888;margin-top:2px">Requested: ${r.requested_at}</div>
+            </div>
+            <button class="btn btn-sm" style="background:rgba(245,158,11,.2);border-color:#f59e0b;color:#d97706"
+              onclick="openAdminResetPw(${r.user_id},'${r.username}');resolveRequest(${r.id})">
+              🔑 Reset Pwd
+            </button>
+          </div>`).join('')}
+      </div>` : '';
+
+    const usersHTML = users.map(u=>`<tr>
+      <td><strong style="color:var(--bt)">${u.username}</strong>${u.role==='admin'?'<span class="security-badge">🔒 Admin</span>':''}</td>
+      <td><span class="role-badge role-${u.role}">${u.role}</span></td>
+      <td><span style="font-size:.78rem;color:${u.is_active?'#16a34a':'#dc2626'}">${u.is_active?'🟢 Active':'🔴 Disabled'}</span></td>
+      <td>${u.must_change_pwd?'<span class="must-change-badge">⚠️ Pending</span>':'<span style="color:#16a34a;font-size:.78rem">✅ Set</span>'}</td>
+      <td style="color:var(--bt2);font-size:.78rem">${u.created_at||''}</td>
+      <td><div class="action-btns">
+        <button class="btn btn-ghost btn-sm" onclick="toggleUser(${u.id})">${u.is_active?'🔒 Disable':'🔓 Enable'}</button>
+        ${u.must_change_pwd ? `<button class="btn btn-sm" style="background:rgba(245,158,11,.2);border-color:#f59e0b;color:#d97706" onclick="openAdminResetPw(${u.id},'${u.username}')">🔑 Reset Pwd</button>` : ''}
+        ${u.role!=='admin'?`<button class="btn btn-danger btn-sm" onclick="confirmDeleteUser(${u.id},'${u.username}')">🗑️ Delete</button>`:''}
+      </div></td>
+    </tr>`).join('');
+
+    setPage('Manage Users','Admin / Users',`
+      ${reqHTML}
+      <div class="table-wrap">
+        <div class="t-header"><h3>All Users (${users.length})</h3>
+          <button class="btn btn-sm" style="background:#1d4ed8;border-color:#1d4ed8;color:#fff;font-weight:700" onclick="openCreateUser()">➕ Add Faculty</button>
+          <button class="btn btn-sm" style="background:#1d4ed8;border-color:#1d4ed8;color:#fff;font-weight:700" onclick="navigate('add-student')">➕ Add Student</button>
+        </div>
+        <table>
+          <thead><tr><th>Username</th><th>Role</th><th>Status</th><th>Must Change Pwd</th><th>Created</th><th>Actions</th></tr></thead>
+          <tbody>${usersHTML}</tbody>
+        </table>
+      </div>`);
+
+  } catch(e){ setPage('Manage Users','Admin',`<div class="empty-state"><div class="ei">⚠️</div>${e.message}</div>`); }
+}
+function confirmDeleteUser(id, username){
+  openModal('Confirm Delete User',
+    `<p style="color:var(--bt2)">Delete user <strong>${username}</strong>?</p>
+     <p style="color:#ef4444;font-size:.82rem;margin-top:8px">⚠️ This also deletes their student record and cannot be undone.</p>`,
+    `<button class="btn btn-danger" onclick="deleteUser(${id})">🗑️ Delete</button>`);
+}
+
+async function deleteUser(id){
+  try {
+    await apiFetch(`/users/${id}`, {method:'DELETE'});
+    closeModal();
+    toast('User deleted.','info');
+    navigate('manage-users');
+  } catch(e){ toast(e.message,'error'); }
+}
+
+function openCreateUser(){
+  openModal('Add Faculty Account',`
+    <p style="font-size:.82rem;color:var(--bt2);margin-bottom:1rem">Faculty will set their own password on first login.</p>
+    <div class="mfg"><label>Username</label><input type="text" id="cu-name" placeholder="e.g. faculty_john"></div>
+    <div class="mfg"><label>Temporary Password</label>
+      <input type="password" id="cu-pass" placeholder="Min 6 chars">
+    </div>`,
+    `<button class="btn btn-success" onclick="saveCreateFaculty()">✅ Create Faculty</button>`);
+}
+async function saveCreateFaculty(){
+  const uname = document.getElementById('cu-name').value.trim();
+  const pw    = document.getElementById('cu-pass').value;
+
+  if(!uname||!pw){ toast('All fields required','error'); return; }
+  if(pw.length<6){ toast('Password min 6 chars','error'); return; }
+  if(/\s/.test(uname)){ toast('Username cannot have spaces','error'); return; }
+
+  try {
+    await apiFetch('/users',{method:'POST',body:{username:uname,temp_password:pw,role:'faculty'}});
+    closeModal();
+    toast(`Faculty "${uname}" created!`);
+    navigate('manage-users');
+  } catch(e){
+    if(e.message.toLowerCase().includes('already exists')){
+      toast(`Username "${uname}" already exists — choose another!`,'error');
+    } else {
+      toast(e.message,'error');
+    }
+  }
+}
+async function toggleUser(id){
+  try {
+    const r=await apiFetch(`/users/${id}/toggle`,{method:'POST'});
+    toast(`"${r.username}" ${r.is_active?'enabled':'disabled'}.`,'info');
+    navigate('manage-users');
+  } catch(e){ toast(e.message,'error'); }
+}
+
+function openAdminResetPw(id, username){
+  openModal(`Reset Password: ${username}`,`
+    <p style="font-size:.82rem;color:var(--bt2);margin-bottom:1rem">This sets a new temp password. The user will be forced to change it on next login.</p>
+    <div class="mfg"><label>New Temp Password</label><input type="password" id="rp-pw" placeholder="Min 6 chars"></div>`,
+    `<button class="btn btn-success" onclick="doAdminResetPw(${id})">🔒 Reset</button>`);
+}
+async function doAdminResetPw(id){
+  const pw=document.getElementById('rp-pw').value;
+  if(!pw||pw.length<6){toast('Min 6 chars','error');return;}
+  try {
+    await apiFetch(`/users/${id}/reset-password`,{method:'POST',body:{new_password:pw}});
+    closeModal();toast('Password reset. User must change on next login.','success');
+  } catch(e){ toast(e.message,'error'); }
+}
+
+// ── AUDIT LOG ──
+async function renderAuditLog(){
+  setPage('Audit Log','Admin / Audit Log',`<div style="text-align:center;padding:2rem"><div class="spinner"></div></div>`);
+  try {
+    const logs = await apiFetch('/audit-log');
+    const ac=a=>{if(a.includes('INSERT')||a.includes('CREATE'))return'audit-INSERT';if(a.includes('UPDATE')||a.includes('BONUS')||a.includes('TOGGLE')||a.includes('RESET'))return'audit-UPDATE';if(a.includes('DELETE'))return'audit-DELETE';return'audit-LOGIN';};
+    setPage('Audit Log','Admin / Audit Log',`
+      <div class="table-wrap">
+        <div class="t-header"><h3>Recent Activity</h3></div>
+        ${logs.length===0?`<div class="empty-state"><div class="ei">📭</div>No entries yet.</div>`:
+          logs.map(l=>`<div class="audit-item">
+            <div class="audit-dot ${ac(l.action)}"></div>
+            <div style="flex:1"><div class="at">${l.action}</div><div class="ad">${l.details||''}</div></div>
+            <div style="text-align:right"><div style="font-size:.78rem;color:#60a5fa">${l.actor||''}</div><div style="font-size:.72rem;color:var(--bt3)">${l.created_at||''}</div></div>
+          </div>`).join('')}
+      </div>`);
+  } catch(e){ setPage('Audit Log','Admin',`<div class="empty-state"><div class="ei">⚠️</div>${e.message}</div>`); }
+}
+
+// ── MY RECORD (student) ──
+async function renderMyRecord(){
+  setPage('My Record','Account',`<div style="text-align:center;padding:2rem"><div class="spinner"></div></div>`);
+  try {
+    const s = await apiFetch('/students/me');
+    const subjects = s.subjects||{};
+    const subScores = Object.values(subjects);
+    setPage('My Record','Account',`
+      <div style="max-width:680px">
+        <div class="chart-card" style="margin-bottom:1rem">
+          <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.3rem">
+            <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#2563eb,#60a5fa);display:flex;align-items:center;justify-content:center;font-size:1.4rem;font-weight:700;color:#fff">${s.full_name[0]}</div>
+            <div><div style="font-size:1.1rem;font-weight:700;color:var(--bt)">${s.full_name}</div><span class="dept-chip">${s.department}</span></div>
+            <span class="grade-badge grade-${grade(+s.avg_marks)}" style="margin-left:auto;width:38px;height:38px;line-height:38px;font-size:1.1rem">${grade(+s.avg_marks)}</span>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem">
+            <div style="background:var(--bc2);border-radius:10px;padding:.9rem;text-align:center"><div style="font-size:1.8rem;font-weight:700;font-family:'JetBrains Mono';color:#60a5fa">${(+s.avg_marks).toFixed(1)}</div><div style="font-size:.7rem;color:var(--bt2)">Avg Marks</div></div>
+            <div style="background:var(--bc2);border-radius:10px;padding:.9rem;text-align:center"><div style="font-size:1.8rem;font-weight:700;font-family:'JetBrains Mono';color:#f59e0b">${subScores.length}</div><div style="font-size:.7rem;color:var(--bt2)">Subjects</div></div>
+            <div style="background:var(--bc2);border-radius:10px;padding:.9rem;text-align:center"><div style="font-size:1.8rem;font-weight:700;font-family:'JetBrains Mono';color:#e91e8c">${s.enrolled_at||'—'}</div><div style="font-size:.7rem;color:var(--bt2)">Enrolled</div></div>
+          </div>
+        </div>
+        <button class="btn-primary" onclick="navigate('my-subjects')">📚 View Subject Breakdown →</button>
+        <button class="btn-primary" style="margin-top:.6rem;background:linear-gradient(135deg,#c2185b,#e91e8c)" onclick="downloadReportCard(${s.id},'${s.full_name}')">📄 Download Report Card</button>
+      </div>`);
+  } catch(e){ setPage('My Record','Account',`<div class="empty-state"><div class="ei">⚠️</div>${e.message}</div>`); }
+}
+
+// ── MY SUBJECTS (student) ──
+async function renderMySubjects(){
+  setPage('Subject Breakdown','Account',`<div style="text-align:center;padding:2rem"><div class="spinner"></div></div>`);
+  try {
+    const s = await apiFetch('/students/me');
+    const subjects = s.subjects || {};
+    const subNames = Object.keys(subjects);
+    if(!subNames.length){
+      setPage('Subject Breakdown','Account',`<div class="empty-state"><div class="ei">📚</div>No subject data yet.</div>`);
+      return;
+    }
+    const subScores = subNames.map(n => typeof subjects[n]==='object' ? subjects[n].marks : subjects[n]);
+
+    setPage('Subject Breakdown','Account',`
+      <div style="max-width:720px">
+        <div class="chart-card" style="margin-bottom:1rem">
+          <h3>Subject-wise Performance</h3>
+          <div style="height:260px;position:relative"><canvas id="subj-chart"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <h3>Details (Internal + External = Total)</h3>
+          <div style="display:flex;flex-direction:column;gap:10px;margin-top:.6rem">
+            ${subNames.map(sub => {
+              const d = subjects[sub];
+              const m = typeof d==='object' ? d.marks    : d;
+              const i = typeof d==='object' ? d.internal : null;
+              const e = typeof d==='object' ? d.external : null;
+              const g = grade(m);
+              return `<div style="background:var(--bc2);border-radius:10px;padding:.7rem 1rem">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+                  <span style="font-weight:700;color:var(--bt);font-size:.88rem">${sub}</span>
+                  <span class="grade-badge grade-${g}">${g}</span>
+                </div>
+                <div style="height:8px;background:var(--bb);border-radius:4px;overflow:hidden;margin-bottom:6px">
+                  <div style="height:100%;width:${m}%;background:${gradeColor(g)};border-radius:4px;transition:width 1s ease"></div>
+                </div>
+                <div style="display:flex;gap:12px;font-size:.78rem;font-family:'JetBrains Mono'">
+                  ${i !== null ? `
+                    <span style="color:#60a5fa">Internal: ${i}/40</span>
+                    <span style="color:#e91e8c">External: ${e}/60</span>
+                    <span style="color:var(--bt);font-weight:700">Total: ${m}/100</span>
+                  ` : `<span style="color:var(--bt2)">${m}/100</span>`}
+                </div>
+              </div>`;
+            }).join('')}
+          </div>
+        </div>
+      </div>`);
+
+    setTimeout(()=>{
+      destroyChart('subj');
+      const ctx = document.getElementById('subj-chart');
+      if(!ctx) return;
+      _charts['subj'] = new Chart(ctx, {
+        type:'bar',
+        data:{
+          labels: subNames,
+          datasets:[
+            {
+              label:'Internal',
+              data: subNames.map(n => typeof subjects[n]==='object' ? subjects[n].internal : 0),
+              backgroundColor:'rgba(96,165,250,.8)',
+              borderColor:'#3b82f6', borderWidth:2, borderRadius:4
+            },
+            {
+              label:'External',
+              data: subNames.map(n => typeof subjects[n]==='object' ? subjects[n].external : 0),
+              backgroundColor:'rgba(233,30,140,.7)',
+              borderColor:'#e91e8c', borderWidth:2, borderRadius:4
+            }
+          ]
+        },
+        options:{
+          responsive:true, maintainAspectRatio:false,
+          plugins:{legend:{labels:{color:'#1d4ed8'}}},
+          scales:{
+            x:{stacked:true, grid:{display:false}, ticks:{color:'#1d4ed8'}},
+            y:{stacked:true, min:0, max:100, grid:{color:'rgba(147,197,253,.15)'}, ticks:{color:'#1d4ed8'}}
+          }
+        }
+      });
+    },100);
+  } catch(e){ setPage('Subject Breakdown','Account',`<div class="empty-state"><div class="ei">⚠️</div>${e.message}</div>`); }
+}
+async function applyDashBonus(){
+  const dept = document.getElementById('db-dept').value;
+  const bonus = parseFloat(document.getElementById('db-bonus').value);
+  if(isNaN(bonus)||bonus<=0){ toast('Enter a valid bonus','error'); return; }
+  try {
+    const r = await apiFetch('/analytics/bonus',{method:'POST',body:{department:dept,bonus}});
+    toast(`Bonus of ${bonus} applied to ${r.rows_updated} subject rows in ${dept}!`);
+    renderDashboard();
+  } catch(e){ toast(e.message,'error'); }
+}
+
+// ── ATTENDANCE PAGE (admin / faculty) ──
+// ══════════════════════════════════════════════════════════════
+// ATTENDANCE — Admin / Faculty view
+// ══════════════════════════════════════════════════════════════
+async function renderAttendance() {
+  setPage('Attendance','Reports / Attendance',`<div style="text-align:center;padding:2rem"><div class="spinner"></div></div>`);
+  try {
+    const [overview, analyticsData] = await Promise.all([
+      apiFetch('/attendance'),
+      apiFetch('/analytics/overview')
+    ]);
+    const students = analyticsData.students || [];
+    const today = new Date().toISOString().split('T')[0];
+    const isFaculty = currentUser.role === 'faculty';
+
+    setPage('Attendance','Reports / Attendance',`
+
+      ${isFaculty ? `
+      <div class="chart-card" style="max-width:900px;margin-bottom:1rem">
+        <h3 style="margin-bottom:.9rem">📅 Mark Attendance</h3>
+        <div style="display:grid;grid-template-columns:1fr 200px 160px 120px;gap:.8rem;align-items:flex-end;margin-bottom:.8rem">
+          <div>
+            <label style="font-size:.78rem;color:var(--bt2);display:block;margin-bottom:5px">Student</label>
+            <select id="att-student" style="width:100%;padding:.55rem .8rem;background:var(--bc2);border:1px solid var(--bb);border-radius:8px;color:var(--bt);font-family:inherit;outline:none">
+              ${students.map(s=>`<option value="${s.id}">${s.full_name} (${s.department})</option>`).join('')}
+            </select>
+          </div>
+          <div>
+            <label style="font-size:.78rem;color:var(--bt2);display:block;margin-bottom:5px">Date</label>
+            <input type="date" id="att-date" value="${today}" style="width:100%;padding:.55rem .8rem;background:var(--bc2);border:1px solid var(--bb);border-radius:8px;color:var(--bt);font-family:inherit;outline:none">
+          </div>
+          <div>
+            <label style="font-size:.78rem;color:var(--bt2);display:block;margin-bottom:5px">Status</label>
+            <select id="att-status" style="width:100%;padding:.55rem .8rem;background:var(--bc2);border:1px solid var(--bb);border-radius:8px;color:var(--bt);font-family:inherit;outline:none">
+              <option value="present">✅ Present</option>
+              <option value="absent">❌ Absent</option>
+            </select>
+          </div>
+          <button class="btn-primary" onclick="markAttendance()" style="height:38px">Mark One</button>
+        </div>
+        <div style="display:flex;gap:.8rem;flex-wrap:wrap">
+          <div style="flex:1;min-width:200px">
+            <label style="font-size:.78rem;color:var(--bt2);display:block;margin-bottom:5px">Bulk Mark Date</label>
+            <input type="date" id="bulk-date" value="${today}" style="width:100%;padding:.55rem .8rem;background:var(--bc2);border:1px solid var(--bb);border-radius:8px;color:var(--bt);font-family:inherit;outline:none">
+          </div>
+          <div style="display:flex;align-items:flex-end;gap:.5rem">
+            <button class="btn-primary" style="background:linear-gradient(135deg,#16a34a,#22c55e)" onclick="markAllAttendance('present')">✅ Mark All Present</button>
+            <button class="btn-primary" style="background:linear-gradient(135deg,#dc2626,#ef4444)" onclick="markAllAttendance('absent')">❌ Mark All Absent</button>
+          </div>
+        </div>
+      </div>` : `
+      <div class="chart-card" style="max-width:500px;margin-bottom:1rem">
+        <h3 style="margin-bottom:.8rem">📅 View Attendance by Date</h3>
+        <div style="display:flex;gap:.8rem;align-items:flex-end">
+          <div style="flex:1">
+            <label style="font-size:.78rem;color:var(--bt2);display:block;margin-bottom:5px">Select Date</label>
+            <input type="date" id="view-date" value="${today}" style="width:100%;padding:.55rem .8rem;background:var(--bc2);border:1px solid var(--bb);border-radius:8px;color:var(--bt);font-family:inherit;outline:none">
+          </div>
+          <button class="btn-primary" onclick="viewAttendanceByDate()">View</button>
+        </div>
+        <div id="date-attendance-result" style="margin-top:1rem"></div>
+      </div>`}
+
+      <div class="table-wrap">
+        <div class="t-header"><h3>Attendance Summary — All Students</h3></div>
+        <table>
+          <thead><tr><th>Name</th><th>Dept</th><th>Present</th><th>Total Days</th><th>Attendance %</th><th>Status</th></tr></thead>
+          <tbody>
+            ${overview.map(s=>{
+              const pct = +(s.attendance_pct ?? 0);
+              const color = pct>=75?'#16a34a':pct>=50?'#d97706':'#dc2626';
+              const cls   = pct>=75?'risk-low':pct>=50?'risk-med':'risk-high';
+              const label = pct>=75?'Good':pct>=50?'Average':'Low';
+              return `<tr>
+                <td><strong style="color:var(--bt)">${s.full_name}</strong></td>
+                <td><span class="dept-chip">${s.department}</span></td>
+                <td style="font-family:'JetBrains Mono'">${s.present_count??0}</td>
+                <td style="font-family:'JetBrains Mono'">${s.total_days??0}</td>
+                <td>
+                  <div style="display:flex;align-items:center;gap:8px">
+                    <div style="flex:1;height:8px;background:var(--bb);border-radius:4px;overflow:hidden">
+                      <div style="height:100%;width:${pct}%;background:${color};border-radius:4px"></div>
+                    </div>
+                    <span style="font-family:'JetBrains Mono';font-size:.8rem;min-width:38px;color:var(--bt2)">${pct}%</span>
+                  </div>
+                </td>
+                <td><span class="${cls}">${label}</span></td>
+              </tr>`;
+            }).join('')}
+          </tbody>
+        </table>
+      </div>
+    `);
+  } catch(e){
+    setPage('Attendance','Reports',`<div class="empty-state"><div class="ei">⚠️</div>${e.message}</div>`);
+  }
+}
+
+async function markAttendance(){
+  const student_id = document.getElementById('att-student').value;
+  const date       = document.getElementById('att-date').value;
+  const status     = document.getElementById('att-status').value;
+  try {
+    await apiFetch('/attendance',{method:'POST',body:{student_id,date,status}});
+    toast(`Marked ${status} for ${date}`);
+    renderAttendance();
+  } catch(e){ toast(e.message,'error'); }
+}
+
+// ══════════════════════════════════════════════════════════════
+// MY ATTENDANCE — Student view
+// ══════════════════════════════════════════════════════════════
+async function renderMyAttendance(){
+  setPage('My Attendance','Account / Attendance',`<div style="text-align:center;padding:2rem"><div class="spinner"></div></div>`);
+  try {
+    const records = await apiFetch('/attendance');
+    if(!records.length){
+      setPage('My Attendance','Account',`<div class="empty-state"><div class="ei">📅</div>No attendance records yet.</div>`);
+      return;
+    }
+    const total   = records[0].total         ?? records.length;
+    const present = records[0].present_count ?? records.filter(r=>r.status==='present').length;
+    const pct     = total ? ((present/total)*100).toFixed(1) : 0;
+    const color   = pct>=75?'#16a34a':pct>=50?'#d97706':'#dc2626';
+
+    setPage('My Attendance','Account / Attendance',`
+      <div style="max-width:560px">
+        <div class="chart-card" style="margin-bottom:1rem">
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem;margin-bottom:1rem">
+            <div style="background:var(--bc2);border-radius:10px;padding:.9rem;text-align:center">
+              <div style="font-size:1.8rem;font-weight:700;font-family:'JetBrains Mono';color:${color}">${pct}%</div>
+              <div style="font-size:.7rem;color:var(--bt2)">Attendance</div>
+            </div>
+            <div style="background:var(--bc2);border-radius:10px;padding:.9rem;text-align:center">
+              <div style="font-size:1.8rem;font-weight:700;font-family:'JetBrains Mono';color:#16a34a">${present}</div>
+              <div style="font-size:.7rem;color:var(--bt2)">Present Days</div>
+            </div>
+            <div style="background:var(--bc2);border-radius:10px;padding:.9rem;text-align:center">
+              <div style="font-size:1.8rem;font-weight:700;font-family:'JetBrains Mono';color:#dc2626">${total-present}</div>
+              <div style="font-size:.7rem;color:var(--bt2)">Absent Days</div>
+            </div>
+          </div>
+          <div style="height:10px;background:var(--bb);border-radius:5px;overflow:hidden">
+            <div style="height:100%;width:${pct}%;background:${color};border-radius:5px;transition:width 1s ease"></div>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <div class="t-header"><h3>Last ${records.length} Records</h3></div>
+          <table>
+            <thead><tr><th>Date</th><th>Status</th></tr></thead>
+            <tbody>
+              ${records.map(r=>`<tr>
+                <td style="font-family:'JetBrains Mono';color:var(--bt2)">${r.date}</td>
+                <td>${r.status==='present'?'<span class="risk-low">✅ Present</span>':'<span class="risk-high">❌ Absent</span>'}</td>
+              </tr>`).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `);
+  } catch(e){
+    setPage('My Attendance','Account',`<div class="empty-state"><div class="ei">⚠️</div>${e.message}</div>`);
+  }
+}
+
+// ══════════════════════════════════════════════════════════════
+// NOTIFICATIONS BELL
+// ══════════════════════════════════════════════════════════════
+async function loadNotifications(){
+  try {
+    let notes = [];
+
+    if(currentUser.role !== 'student'){
+      const markNotes = await apiFetch('/notifications').catch(()=>[]);
+      notes = notes.concat(markNotes);
+    }
+
+    const attNotes = await apiFetch('/notifications/attendance').catch(()=>[]);
+    notes = notes.concat(attNotes);
+
+    const bell = document.getElementById('notif-bell');
+    if(!bell) return;
+    const count = notes.length;
+    bell.innerHTML = `
+      <div style="position:relative;cursor:pointer" onclick="toggleNotifPanel()">
+        <span style="font-size:1.3rem">🔔</span>
+        ${count>0?`<span style="position:absolute;top:-4px;right:-6px;background:#ef4444;color:#fff;border-radius:50%;width:18px;height:18px;font-size:.62rem;display:flex;align-items:center;justify-content:center;font-weight:700">${count}</span>`:''}
+      </div>
+      <div id="notif-panel" style="display:none;position:absolute;top:50px;right:10px;width:320px;background:var(--bc);border:1px solid var(--bb);border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,.25);z-index:50;max-height:340px;overflow-y:auto">
+        <div style="padding:.8rem 1rem;border-bottom:1px solid var(--bb);font-weight:700;font-size:.88rem;color:var(--bt)">Notifications (${count})</div>
+        ${count===0
+          ? '<div style="padding:1.2rem;text-align:center;color:var(--bt2);font-size:.85rem">All clear! 🎉</div>'
+          : notes.map(n=>`<div style="padding:.7rem 1rem;border-bottom:1px solid var(--bb);display:flex;gap:8px;align-items:flex-start">
+              <span>${n.type==='alert'?'🚨':'⚠️'}</span>
+              <span style="font-size:.8rem;color:var(--bt)">${n.msg}</span>
+            </div>`).join('')}
+      </div>`;
+  } catch(_){}
+}
+
+function toggleNotifPanel(){
+  const p = document.getElementById('notif-panel');
+  if(p) p.style.display = p.style.display==='none'?'block':'none';
+}
+
+// ══════════════════════════════════════════════════════════════
+// LEADERBOARD — uses /api/rankings (student_rank_view)
+// ══════════════════════════════════════════════════════════════
+async function renderLeaderboard(){
+  setPage('Leaderboard','Reports',`<div style="text-align:center;padding:2rem"><div class="spinner"></div></div>`);
+  try {
+    const rows = await apiFetch('/rankings');
+    setPage('Leaderboard','Reports',`
+      <div class="table-wrap" style="max-width:800px">
+        <div class="t-header"><h3>🏅 Overall Rankings</h3></div>
+        <table>
+          <thead><tr><th>Rank</th><th>Name</th><th>Dept</th><th>Avg Marks</th><th>Dept Rank</th><th>Percentile</th><th>Grade</th></tr></thead>
+          <tbody>
+            ${rows.map(r=>`<tr>
+              <td><div class="rank-num rank-${r.overall_rank<=3?r.overall_rank:'n'}" style="width:28px;height:28px;font-size:.78rem">${r.overall_rank}</div></td>
+              <td><strong style="color:var(--bt)">${r.full_name}</strong></td>
+              <td><span class="dept-chip">${r.department}</span></td>
+              <td style="font-family:'JetBrains Mono'">${r.avg_marks}</td>
+              <td style="font-family:'JetBrains Mono';color:var(--bt2)">#${r.dept_rank}</td>
+              <td style="font-family:'JetBrains Mono';color:#60a5fa">${r.percentile}%</td>
+              <td><span class="grade-badge grade-${grade(+r.avg_marks)}">${grade(+r.avg_marks)}</span></td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+    `);
+  } catch(e){
+    setPage('Leaderboard','Reports',`<div class="empty-state"><div class="ei">⚠️</div>${e.message}</div>`);
+  }
+}
+
+// ══════════════════════════════════════════════════════════════
+// REPORT CARD PDF DOWNLOAD
+// ══════════════════════════════════════════════════════════════
+async function downloadReportCard(sid, name){
+  try {
+    const data = await apiFetch(`/students/${sid}/report-card`);
+    const subjects = data.subjects || [];
+    const rows = subjects.map(s=>`
+      <tr>
+        <td style="padding:8px 12px;border:1px solid #ddd">${s.subject}</td>
+        <td style="padding:8px 12px;border:1px solid #ddd;text-align:center">${s.marks}</td>
+        <td style="padding:8px 12px;border:1px solid #ddd;text-align:center;font-weight:700;color:#c2185b">${grade(+s.marks)}</td>
+      </tr>`).join('');
+
+    const html = `<!DOCTYPE html><html><head>
+      <meta charset="UTF-8">
+      <title>Report Card — ${data.full_name}</title>
+      <style>
+        body{font-family:Arial,sans-serif;margin:40px;color:#111}
+        h1{color:#c2185b;font-size:1.6rem;margin-bottom:4px}
+        .sub{color:#666;font-size:.9rem;margin-bottom:20px}
+        table{border-collapse:collapse;width:100%;margin-bottom:20px}
+        th{background:#f8bbd0;padding:10px 12px;border:1px solid #ddd;text-align:left}
+        .badge{display:inline-block;background:#e91e8c;color:#fff;padding:4px 14px;border-radius:20px;font-weight:700;font-size:1rem}
+        .info{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px;font-size:.9rem}
+        .info div{background:#fce4ec;padding:8px 14px;border-radius:8px}
+        .info span{font-weight:700;color:#c2185b}
+        @media print{body{margin:20px}}
+      </style>
+    </head><body>
+      <h1>🎓 Student Report Card</h1>
+      <div class="sub">Student Performance Analyzer — SPA System</div>
+      <div class="info">
+        <div>Name: <span>${data.full_name}</span></div>
+        <div>Department: <span>${data.department}</span></div>
+        <div>Overall Rank: <span>#${data.overall_rank}</span></div>
+        <div>Dept Rank: <span>#${data.dept_rank}</span></div>
+        <div>Average Marks: <span>${data.avg_marks}</span></div>
+        <div>Percentile: <span>${data.percentile}%</span></div>
+      </div>
+      <table>
+        <thead><tr><th>Subject</th><th>Marks</th><th>Grade</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+      <div>Overall Grade: <span class="badge">${grade(+data.avg_marks)}</span></div>
+      <div id="forgot-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:999;align-items:center;justify-content:center">
+  <div style="background:#fff;border-radius:18px;padding:2rem;width:360px;box-shadow:0 8px 40px rgba(0,0,0,.25)">
+    
+    <h3 style="color:#c2185b;margin-bottom:.4rem">🔑 Forgot Password</h3>
+    <p style="font-size:.8rem;color:#888;margin-bottom:1.2rem">
+      Answer your security question to reset your password.
+    </p>
+
+    <!-- STEP 1: Verify -->
+    <div id="fp-step1">
+      <label style="font-size:.8rem;color:#555;font-weight:600">Username</label>
+      <input id="fp-username" type="text" placeholder="Enter your username"
+             style="width:100%;padding:.6rem .8rem;border:1px solid #ddd;border-radius:8px;
+                    margin:.4rem 0 .8rem;font-size:.9rem;box-sizing:border-box;outline:none">
+      
+      <label style="font-size:.8rem;color:#555;font-weight:600">
+        Security Question: <em style="color:#c2185b">What is your favourite colour?</em>
+      </label>
+      <input id="fp-answer" type="text" placeholder="Your answer"
+             style="width:100%;padding:.6rem .8rem;border:1px solid #ddd;border-radius:8px;
+                    margin:.4rem 0 .8rem;font-size:.9rem;box-sizing:border-box;outline:none">
+      
+      <button onclick="forgotVerify()"
+              style="width:100%;padding:.75rem;background:#c2185b;color:#fff;border:none;
+                     border-radius:10px;font-weight:700;font-size:.95rem;cursor:pointer;margin-top:.3rem">
+        Verify →
+      </button>
+    </div>
+
+    <!-- STEP 2: New Password -->
+    <div id="fp-step2" style="display:none">
+      <div style="background:#f0fdf4;border:1px solid #86efac;border-radius:8px;
+                  padding:.7rem 1rem;margin-bottom:1rem;font-size:.83rem;color:#16a34a;font-weight:600">
+        ✅ Identity verified! Set your new password.
+      </div>
+      <label style="font-size:.8rem;color:#555;font-weight:600">New Password</label>
+      <input id="fp-newpw" type="password" placeholder="Min 6 characters"
+             style="width:100%;padding:.6rem .8rem;border:1px solid #ddd;border-radius:8px;
+                    margin:.4rem 0 .8rem;font-size:.9rem;box-sizing:border-box;outline:none">
+      <label style="font-size:.8rem;color:#555;font-weight:600">Confirm Password</label>
+      <input id="fp-confirmpw" type="password" placeholder="Repeat new password"
+             style="width:100%;padding:.6rem .8rem;border:1px solid #ddd;border-radius:8px;
+                    margin:.4rem 0 .8rem;font-size:.9rem;box-sizing:border-box;outline:none">
+      <button onclick="forgotReset()"
+              style="width:100%;padding:.75rem;background:#16a34a;color:#fff;border:none;
+                     border-radius:10px;font-weight:700;font-size:.95rem;cursor:pointer;margin-top:.3rem">
+        Reset Password ✅
+      </button>
+    </div>
+
+    <div id="fp-error" style="color:#dc2626;font-size:.8rem;margin-top:.7rem;text-align:center"></div>
+    <div style="text-align:center;margin-top:.8rem">
+      <span onclick="hideForgotModal()" 
+            style="font-size:.8rem;color:#aaa;cursor:pointer">✕ Cancel</span>
+    </div>
+  </div>
+</div>
+    </body></html>`;
+
+    const blob = new Blob([html],{type:'text/html'});
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href     = url;
+    a.download = `ReportCard_${name.replace(/\s+/g,'_')}.html`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast(`Report card downloaded for ${name}`);
+  } catch(e){ toast(e.message,'error'); }
+}
+async function renderAdvancedSearch(){
+  setPage('Advanced Search','Students / Search',`
+    <div class="chart-card" style="max-width:600px;margin-bottom:1rem">
+      <h3 style="margin-bottom:1rem">🔍 Filter Students</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem">
+        <div class="mfg">
+          <label>Department</label>
+          <select id="f-dept" style="width:100%;padding:.55rem .85rem;background:var(--bc2);border:1px solid var(--bb);border-radius:8px;color:var(--bt);font-family:inherit;outline:none">
+            <option value="">All</option>
+            ${['CSE','CST','ECE','IT','MECH'].map(d=>`<option>${d}</option>`).join('')}
+          </select>
+        </div>
+        <div class="mfg">
+          <label>Grade</label>
+          <select id="f-grade" style="width:100%;padding:.55rem .85rem;background:var(--bc2);border:1px solid var(--bb);border-radius:8px;color:var(--bt);font-family:inherit;outline:none">
+            <option value="">All</option>
+            <option>A</option><option>B</option><option>C</option><option>D</option><option>F</option>
+          </select>
+        </div>
+        <div class="mfg">
+          <label>Min Marks</label>
+          <input type="number" id="f-min" min="0" max="100" placeholder="0" style="width:100%;padding:.55rem .85rem;background:var(--bc2);border:1px solid var(--bb);border-radius:8px;color:var(--bt);font-family:inherit;outline:none">
+        </div>
+        <div class="mfg">
+          <label>Max Marks</label>
+          <input type="number" id="f-max" min="0" max="100" placeholder="100" style="width:100%;padding:.55rem .85rem;background:var(--bc2);border:1px solid var(--bb);border-radius:8px;color:var(--bt);font-family:inherit;outline:none">
+        </div>
+      </div>
+      <button class="btn-primary" style="margin-top:.5rem" onclick="runAdvancedSearch()">🔍 Search</button>
+    </div>
+    <div id="adv-results"></div>`);
+}
+
+async function runAdvancedSearch(){
+  try {
+    const data = await apiFetch('/analytics/overview');
+    let students = data.students || [];
+    const dept = document.getElementById('f-dept').value;
+    const grd  = document.getElementById('f-grade').value;
+    const mn   = parseFloat(document.getElementById('f-min').value)||0;
+    const mx   = parseFloat(document.getElementById('f-max').value)||100;
+    if(dept) students = students.filter(s=>s.department===dept);
+    if(grd)  students = students.filter(s=>grade(+s.avg_marks)===grd);
+    students = students.filter(s=>+s.avg_marks>=mn && +s.avg_marks<=mx);
+    document.getElementById('adv-results').innerHTML = buildStudentTable(students);
+  } catch(e){ toast(e.message,'error'); }
+}
+function renderSearchDept(){
+  setPage('Search by Dept','Students / Search',`
+    <div style="max-width:400px;margin-bottom:1.1rem" class="chart-card">
+      <h3 style="margin-bottom:.8rem">Filter by Department</h3>
+      <div style="display:flex;gap:8px">
+        <input id="sd-dept" placeholder="e.g. CSE" style="flex:1;padding:.55rem .85rem;background:var(--bc2);border:1px solid var(--bb);border-radius:8px;color:var(--bt);font-family:inherit;outline:none">
+        <button class="btn-primary" onclick="doSearchDept()">Search</button>
+      </div>
+    </div>
+    <div id="search-results"></div>`);
+}
+
+async function doSearchDept(){
+  const dept = document.getElementById('sd-dept').value.trim();
+  try {
+    const students = await apiFetch(`/students${dept ? `?department=${encodeURIComponent(dept)}` : ''}`);
+    document.getElementById('search-results').innerHTML = buildStudentTable(students);
+  } catch(e){ toast(e.message,'error'); }
+}
+async function markAllAttendance(status){
+  const date = document.getElementById('bulk-date').value;
+  if(!date){ toast('Select a date first','error'); return; }
+  try {
+    const data = await apiFetch('/analytics/overview');
+    const students = data.students || [];
+    let count = 0;
+    for(const s of students){
+      await apiFetch('/attendance',{method:'POST',body:{student_id:s.id, date, status}});
+      count++;
+    }
+    toast(`Marked all ${count} students as ${status} for ${date}`);
+    renderAttendance();
+  } catch(e){ toast(e.message,'error'); }
+}
+
+async function viewAttendanceByDate(){
+  const date = document.getElementById('view-date').value;
+  if(!date){ toast('Select a date','error'); return; }
+  try {
+    const records = await apiFetch(`/attendance?date=${date}`);
+    const el = document.getElementById('date-attendance-result');
+    if(!records.length){
+      el.innerHTML = `<p style="color:var(--bt2);font-size:.85rem;margin-top:.5rem">No records for ${date}</p>`;
+      return;
+    }
+    el.innerHTML = `
+      <div style="font-size:.8rem;font-weight:700;color:var(--bt2);margin-bottom:.5rem">Records for ${date}</div>
+      <div style="display:flex;flex-direction:column;gap:5px">
+        ${records.map(r=>`
+          <div style="display:flex;align-items:center;gap:8px;padding:.4rem .7rem;background:var(--bc2);border-radius:8px;font-size:.82rem">
+            <strong style="color:var(--bt);flex:1">${r.full_name||'Student'}</strong>
+            ${r.status==='present'?'<span class="risk-low">✅ Present</span>':'<span class="risk-high">❌ Absent</span>'}
+          </div>`).join('')}
+      </div>`;
+  } catch(e){ toast(e.message,'error'); }
+}
+// ══════════════════════════════════════════════════════════════
+// ENTER MARKS (internal + external, per semester)
+// ══════════════════════════════════════════════════════════════
+async function renderEnterMarks(){
+  setPage('Enter Marks','Faculty / Marks',`<div style="text-align:center;padding:2rem"><div class="spinner"></div></div>`);
+  try {
+    const data = await apiFetch('/analytics/overview');
+    const students = data.students || [];
+    const subjectList = ['Math','Physics','Chemistry','CS','English','DBMS','OS'];
+    setPage('Enter Marks','Faculty / Marks',`
+      <div class="chart-card" style="max-width:680px">
+        <h3 style="margin-bottom:1rem">📊 Enter Internal & External Marks</h3>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-bottom:1rem">
+          <div class="mfg">
+            <label>Student</label>
+            <select id="em-student" style="width:100%;padding:.55rem .85rem;background:var(--bc2);border:1px solid var(--bb);border-radius:8px;color:var(--bt);font-family:inherit;outline:none">
+              ${students.map(s=>`<option value="${s.id}">${s.full_name} (${s.department})</option>`).join('')}
+            </select>
+          </div>
+          <div class="mfg">
+            <label>Semester</label>
+            <select id="em-sem" style="width:100%;padding:.55rem .85rem;background:var(--bc2);border:1px solid var(--bb);border-radius:8px;color:var(--bt);font-family:inherit;outline:none">
+              ${[1,2,3,4,5,6,7,8].map(s=>`<option value="${s}">Semester ${s}</option>`).join('')}
+            </select>
+          </div>
+        </div>
+        <div style="font-size:.78rem;font-weight:700;color:var(--bt3);text-transform:uppercase;margin-bottom:.6rem">
+          Internal (max 40) + External (max 60) = Total (100)
+        </div>
+        <div style="display:grid;gap:.5rem" id="marks-inputs">
+          ${subjectList.map(sub=>`
+            <div style="display:grid;grid-template-columns:120px 1fr 1fr 60px;align-items:center;gap:.6rem;padding:.5rem .7rem;background:var(--bc2);border-radius:8px">
+              <span style="font-size:.85rem;font-weight:600;color:var(--bt)">${sub}</span>
+              <div>
+                <label style="font-size:.7rem;color:var(--bt2);display:block;margin-bottom:2px">Internal /40</label>
+                <input type="number" id="int-${sub}" min="0" max="40" placeholder="0–40"
+                  style="width:100%;padding:.4rem .6rem;background:var(--bc3);border:1px solid var(--bb);border-radius:6px;color:var(--bt);font-family:inherit;outline:none"
+                  oninput="updateTotal('${sub}')">
+              </div>
+              <div>
+                <label style="font-size:.7rem;color:var(--bt2);display:block;margin-bottom:2px">External /60</label>
+                <input type="number" id="ext-${sub}" min="0" max="60" placeholder="0–60"
+                  style="width:100%;padding:.4rem .6rem;background:var(--bc3);border:1px solid var(--bb);border-radius:6px;color:var(--bt);font-family:inherit;outline:none"
+                  oninput="updateTotal('${sub}')">
+              </div>
+              <div style="text-align:center">
+                <div style="font-size:.65rem;color:var(--bt2)">Total</div>
+                <div id="total-${sub}" style="font-family:'JetBrains Mono';font-weight:700;color:#60a5fa;font-size:1rem">0</div>
+              </div>
+            </div>`).join('')}
+        </div>
+        <button class="btn-primary" style="margin-top:1rem" onclick="saveAllMarks()">💾 Save All Marks</button>
+      </div>`);
+  } catch(e){ setPage('Enter Marks','Faculty',`<div class="empty-state"><div class="ei">⚠️</div>${e.message}</div>`); }
+}
+
+function updateTotal(sub){
+  const i = parseFloat(document.getElementById(`int-${sub}`)?.value)||0;
+  const e = parseFloat(document.getElementById(`ext-${sub}`)?.value)||0;
+  const el = document.getElementById(`total-${sub}`);
+  if(el) el.textContent = Math.min(i,40) + Math.min(e,60);
+}
+
+async function saveAllMarks(){
+  const sid = document.getElementById('em-student').value;
+  const sem = document.getElementById('em-sem').value;
+  const subjectList = ['Math','Physics','Chemistry','CS','English','DBMS','OS'];
+  let saved = 0;
+  for(const sub of subjectList){
+    const internal = parseFloat(document.getElementById(`int-${sub}`)?.value);
+    const external = parseFloat(document.getElementById(`ext-${sub}`)?.value);
+    if(isNaN(internal) && isNaN(external)) continue;
+    try {
+      await apiFetch(`/students/${sid}/subject-marks`, {
+        method:'POST',
+        body:{ subject:sub, internal_marks:internal||0, external_marks:external||0, semester:+sem }
+      });
+      saved++;
+    } catch(e){ toast(`Error saving ${sub}: ${e.message}`,'error'); }
+  }
+  if(saved) toast(`Saved marks for ${saved} subjects (Semester ${sem})!`);
+}
+
+// ══════════════════════════════════════════════════════════════
+// SEMESTER PROGRESS (student)
+// ══════════════════════════════════════════════════════════════
+async function renderMyProgress(){
+  setPage('Semester Progress','Account / Progress',`<div style="text-align:center;padding:2rem"><div class="spinner"></div></div>`);
+  try {
+    const me = await apiFetch('/students/me');
+    const progress = await apiFetch(`/students/${me.id}/progress`);
+
+    if(!progress.length){
+      setPage('Semester Progress','Account',`<div class="empty-state"><div class="ei">📈</div>No semester data yet.</div>`);
+      return;
+    }
+
+    setPage('Semester Progress','Account / Progress',`
+      <div style="max-width:700px">
+        <div class="chart-card" style="margin-bottom:1rem">
+          <h3>📈 Semester-wise Average</h3>
+          <div style="height:220px;position:relative"><canvas id="progress-chart"></canvas></div>
+        </div>
+        ${progress.map(sem=>`
+          <div class="chart-card" style="margin-bottom:.8rem">
+            <h3 style="margin-bottom:.7rem">Semester ${sem.semester} — Avg: <span style="color:#60a5fa;font-family:'JetBrains Mono'">${sem.avg_marks}</span></h3>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              ${sem.subjects.map(s=>`
+                <div style="display:grid;grid-template-columns:110px 1fr 60px 60px 60px;align-items:center;gap:8px;font-size:.8rem">
+                  <span style="color:var(--bt);font-weight:600">${s.subject}</span>
+                  <div style="height:14px;background:var(--bb);border-radius:4px;overflow:hidden">
+                    <div style="height:100%;width:${s.marks}%;background:${gradeColor(grade(s.marks))};border-radius:4px"></div>
+                  </div>
+                  <span style="color:#60a5fa;font-family:'JetBrains Mono';font-size:.75rem">Int:${s.internal}</span>
+                  <span style="color:#e91e8c;font-family:'JetBrains Mono';font-size:.75rem">Ext:${s.external}</span>
+                  <span style="font-weight:700;font-family:'JetBrains Mono'">${s.marks}</span>
+                </div>`).join('')}
+            </div>
+          </div>`).join('')}
+      </div>`);
+
+    setTimeout(()=>{
+      destroyChart('progress');
+      const ctx = document.getElementById('progress-chart');
+      if(!ctx) return;
+      _charts['progress'] = new Chart(ctx,{
+        type:'line',
+        data:{
+          labels: progress.map(s=>`Sem ${s.semester}`),
+          datasets:[{
+            label:'Avg Marks',
+            data: progress.map(s=>s.avg_marks),
+            borderColor:'#3b82f6', backgroundColor:'rgba(59,130,246,.15)',
+            borderWidth:3, pointBackgroundColor:'#60a5fa',
+            pointRadius:6, tension:.4, fill:true
+          }]
+        },
+        options:{responsive:true,maintainAspectRatio:false,
+          plugins:{legend:{display:false}},
+          scales:{y:{min:0,max:100,grid:{color:'rgba(147,197,253,.15)'},ticks:{color:'#1d4ed8'}},
+                  x:{grid:{display:false},ticks:{color:'#1d4ed8'}}}}
+      });
+    },100);
+  } catch(e){ setPage('Semester Progress','Account',`<div class="empty-state"><div class="ei">⚠️</div>${e.message}</div>`); }
+}
+
+// ══════════════════════════════════════════════════════════════
+// TIMETABLE — Faculty/Admin view
+// ══════════════════════════════════════════════════════════════
+async function renderTimetable(){
+  setPage('Timetable','Schedule',`<div style="text-align:center;padding:2rem"><div class="spinner"></div></div>`);
+  try {
+    const rows = await apiFetch('/timetable');
+    const days = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    const depts = [...new Set(rows.map(r=>r.department))];
+    const byDept = {};
+    depts.forEach(d=>{ byDept[d]={}; days.forEach(day=>byDept[d][day]=[]); });
+    rows.forEach(r=>{ if(byDept[r.department]&&byDept[r.department][r.day_of_week]) byDept[r.department][r.day_of_week].push(r); });
+
+    setPage('Timetable','Schedule',`
+      <div class="chart-card" style="max-width:700px;margin-bottom:1rem">
+        <h3 style="margin-bottom:.9rem">🗓️ Add Slot</h3>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.7rem;margin-bottom:.7rem">
+          <div class="mfg">
+            <label>Department</label>
+            <select id="tt-dept" style="width:100%;padding:.5rem .7rem;background:var(--bc2);border:1px solid var(--bb);border-radius:8px;color:var(--bt);font-family:inherit;outline:none">
+              ${['CSE','CST','ECE','IT','MECH'].map(d=>`<option>${d}</option>`).join('')}
+            </select>
+          </div>
+          <div class="mfg">
+            <label>Day</label>
+            <select id="tt-day" style="width:100%;padding:.5rem .7rem;background:var(--bc2);border:1px solid var(--bb);border-radius:8px;color:var(--bt);font-family:inherit;outline:none">
+              ${days.map(d=>`<option>${d}</option>`).join('')}
+            </select>
+          </div>
+          <div class="mfg">
+            <label>Subject</label>
+            <input type="text" id="tt-subject" placeholder="e.g. DBMS" style="width:100%;padding:.5rem .7rem;background:var(--bc2);border:1px solid var(--bb);border-radius:8px;color:var(--bt);font-family:inherit;outline:none">
+          </div>
+          <div class="mfg">
+            <label>Start Time</label>
+            <input type="time" id="tt-start" style="width:100%;padding:.5rem .7rem;background:var(--bc2);border:1px solid var(--bb);border-radius:8px;color:var(--bt);font-family:inherit;outline:none">
+          </div>
+          <div class="mfg">
+            <label>End Time</label>
+            <input type="time" id="tt-end" style="width:100%;padding:.5rem .7rem;background:var(--bc2);border:1px solid var(--bb);border-radius:8px;color:var(--bt);font-family:inherit;outline:none">
+          </div>
+          <div class="mfg">
+            <label>Room</label>
+            <input type="text" id="tt-room" placeholder="e.g. A101" style="width:100%;padding:.5rem .7rem;background:var(--bc2);border:1px solid var(--bb);border-radius:8px;color:var(--bt);font-family:inherit;outline:none">
+          </div>
+        </div>
+        <button class="btn-primary" onclick="addTimetableSlot()">➕ Add Slot</button>
+      </div>
+
+      ${depts.length===0?`<div class="empty-state"><div class="ei">🗓️</div>No timetable entries yet.</div>`:
+        depts.map(dept=>`
+          <div class="chart-card" style="margin-bottom:1rem">
+            <h3 style="margin-bottom:.8rem"><span class="dept-chip">${dept}</span> Timetable</h3>
+            <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:.82rem">
+              <thead><tr>
+                ${days.map(d=>`<th style="padding:.5rem .8rem;background:var(--bc2);border:1px solid var(--bb);color:var(--bt2);font-size:.72rem;font-weight:700;white-space:nowrap">${d}</th>`).join('')}
+              </tr></thead>
+              <tbody><tr>
+                ${days.map(day=>`<td style="padding:.4rem .6rem;border:1px solid var(--bb);vertical-align:top;min-width:110px">
+                  ${(byDept[dept][day]||[]).map(slot=>`
+                    <div style="background:var(--bc2);border-radius:7px;padding:.4rem .6rem;margin-bottom:4px;position:relative">
+                      <div style="font-weight:700;color:var(--bt)">${slot.subject}</div>
+                      <div style="font-size:.7rem;color:var(--bt2)">${slot.start_time}–${slot.end_time}</div>
+                      ${slot.room?`<div style="font-size:.68rem;color:#60a5fa">🏫 ${slot.room}</div>`:''}
+                      <button onclick="deleteTimetableSlot(${slot.id})" style="position:absolute;top:4px;right:4px;background:none;border:none;cursor:pointer;font-size:.75rem;color:#ef4444">✕</button>
+                    </div>`).join('')}
+                </td>`).join('')}
+              </tr></tbody>
+            </table></div>
+          </div>`).join('')}
+    `);
+  } catch(e){ setPage('Timetable','Schedule',`<div class="empty-state"><div class="ei">⚠️</div>${e.message}</div>`); }
+}
+
+async function addTimetableSlot(){
+  const dept    = document.getElementById('tt-dept').value;
+  const day     = document.getElementById('tt-day').value;
+  const subject = document.getElementById('tt-subject').value.trim();
+  const start   = document.getElementById('tt-start').value;
+  const end     = document.getElementById('tt-end').value;
+  const room    = document.getElementById('tt-room').value.trim();
+  if(!subject||!start||!end){ toast('Subject, start & end time required','error'); return; }
+  try {
+    await apiFetch('/timetable',{method:'POST',body:{department:dept,day_of_week:day,start_time:start,end_time:end,subject,room}});
+    toast('Slot added!');
+    renderTimetable();
+  } catch(e){ toast(e.message,'error'); }
+}
+
+async function deleteTimetableSlot(id){
+  try {
+    await apiFetch(`/timetable/${id}`,{method:'DELETE'});
+    toast('Slot removed.','info');
+    renderTimetable();
+  } catch(e){ toast(e.message,'error'); }
+}
+
+// ══════════════════════════════════════════════════════════════
+// TIMETABLE — Student view
+// ══════════════════════════════════════════════════════════════
+async function renderMyTimetable(){
+  setPage('My Timetable','Account / Timetable',`<div style="text-align:center;padding:2rem"><div class="spinner"></div></div>`);
+  try {
+    const rows = await apiFetch('/timetable');
+    console.log('Timetable rows:', rows); // debug
+    const days = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    const byDay = {}; 
+    days.forEach(d => byDay[d] = []);
+    rows.forEach(r => { 
+      if(byDay[r.day_of_week]) byDay[r.day_of_week].push(r); 
+    });
+
+    if(!rows.length){
+      setPage('My Timetable','Account',`<div class="empty-state"><div class="ei">🗓️</div>No timetable uploaded yet.</div>`);
+      return;
+    }
+
+    setPage('My Timetable','Account / Timetable',`
+      <div style="max-width:700px">
+        <div style="overflow-x:auto">
+          <table style="width:100%;border-collapse:collapse;font-size:.82rem;min-width:600px">
+            <thead>
+              <tr>
+                ${days.map(d=>`<th style="padding:.6rem .8rem;background:var(--bc2);border:1px solid var(--bb);color:var(--bt2);font-size:.72rem;font-weight:700;text-align:center">${d}</th>`).join('')}
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                ${days.map(day=>`
+                  <td style="padding:.4rem .5rem;border:1px solid var(--bb);vertical-align:top;min-width:100px">
+                    ${(byDay[day]||[]).sort((a,b)=>(a.start_time||'').localeCompare(b.start_time||'')).map(slot=>`
+                      <div style="background:linear-gradient(135deg,rgba(233,30,140,.15),rgba(194,24,91,.1));border:1px solid rgba(233,30,140,.3);border-radius:8px;padding:.5rem .6rem;margin-bottom:5px">
+                        <div style="font-weight:700;color:var(--bt);font-size:.82rem">${slot.subject}</div>
+                        <div style="font-size:.7rem;color:var(--bt2);margin-top:2px">⏰ ${slot.start_time||'--'}–${slot.end_time||'--'}</div>
+                        ${slot.room?`<div style="font-size:.68rem;color:#60a5fa;margin-top:1px">🏫 ${slot.room}</div>`:''}
+                      </div>`).join('')}
+                  </td>`).join('')}
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>`);
+  } catch(e){ 
+    setPage('My Timetable','Account',`<div class="empty-state"><div class="ei">⚠️</div>${e.message}</div>`); 
+  }
+}
+// ══════════════════════════════════════════════════════════════
+// ASSIGNMENTS — Faculty view
+// ══════════════════════════════════════════════════════════════
+async function renderAssignments(){
+  setPage('Assignments','Assignments',`<div style="text-align:center;padding:2rem"><div class="spinner"></div></div>`);
+  try {
+    const assignments = await apiFetch('/assignments');
+    const today = new Date().toISOString().split('T')[0];
+    setPage('Assignments','Assignments',`
+      <div class="chart-card" style="max-width:680px;margin-bottom:1rem">
+        <h3 style="margin-bottom:.9rem">📝 Post New Assignment</h3>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.7rem">
+          <div class="mfg">
+            <label>Department</label>
+            <select id="as-dept" style="width:100%;padding:.5rem .7rem;background:var(--bc2);border:1px solid var(--bb);border-radius:8px;color:var(--bt);font-family:inherit;outline:none">
+              ${['CSE','CST','ECE','IT','MECH'].map(d=>`<option>${d}</option>`).join('')}
+            </select>
+          </div>
+          <div class="mfg">
+            <label>Subject</label>
+            <input type="text" id="as-subject" placeholder="e.g. DBMS" style="width:100%;padding:.5rem .7rem;background:var(--bc2);border:1px solid var(--bb);border-radius:8px;color:var(--bt);font-family:inherit;outline:none">
+          </div>
+          <div class="mfg" style="grid-column:1/-1">
+            <label>Title</label>
+            <input type="text" id="as-title" placeholder="Assignment title" style="width:100%;padding:.5rem .7rem;background:var(--bc2);border:1px solid var(--bb);border-radius:8px;color:var(--bt);font-family:inherit;outline:none">
+          </div>
+          <div class="mfg" style="grid-column:1/-1">
+            <label>Description</label>
+            <input type="text" id="as-desc" placeholder="Details (optional)" style="width:100%;padding:.5rem .7rem;background:var(--bc2);border:1px solid var(--bb);border-radius:8px;color:var(--bt);font-family:inherit;outline:none">
+          </div>
+          <div class="mfg">
+            <label>Due Date</label>
+            <input type="date" id="as-due" value="${today}" style="width:100%;padding:.5rem .7rem;background:var(--bc2);border:1px solid var(--bb);border-radius:8px;color:var(--bt);font-family:inherit;outline:none">
+          </div>
+        </div>
+        <button class="btn-primary" style="margin-top:.5rem" onclick="postAssignment()">📤 Post Assignment</button>
+      </div>
+
+      <div class="table-wrap">
+        <div class="t-header"><h3>All Assignments (${assignments.length})</h3></div>
+        ${assignments.length===0?`<div class="empty-state"><div class="ei">📝</div>No assignments yet.</div>`:`
+          <table>
+            <thead><tr><th>Dept</th><th>Subject</th><th>Title</th><th>Due Date</th><th>Actions</th></tr></thead>
+            <tbody>
+              ${assignments.map(a=>{
+                const overdue = a.due_date < today;
+                return`<tr>
+                  <td><span class="dept-chip">${a.department}</span></td>
+                  <td style="color:var(--bt2)">${a.subject}</td>
+                  <td><strong style="color:var(--bt)">${a.title}</strong>${a.description?`<div style="font-size:.72rem;color:var(--bt2);margin-top:2px">${a.description}</div>`:''}</td>
+                  <td><span style="color:${overdue?'#ef4444':'#16a34a'};font-family:'JetBrains Mono';font-size:.8rem">${a.due_date}${overdue?' ⚠️':''}</span></td>
+                  <td><div class="action-btns">
+                    <button class="btn btn-sm" onclick="viewSubmissions(${a.id},'${a.title}')">👁️ Submissions</button>
+                    <button class="btn btn-danger btn-sm" onclick="deleteAssignment(${a.id})">🗑️</button>
+                  </div></td>
+                </tr>`;}).join('')}
+            </tbody>
+          </table>`}
+      </div>`);
+  } catch(e){ setPage('Assignments','Assignments',`<div class="empty-state"><div class="ei">⚠️</div>${e.message}</div>`); }
+}
+
+async function postAssignment(){
+  const dept    = document.getElementById('as-dept').value;
+  const subject = document.getElementById('as-subject').value.trim();
+  const title   = document.getElementById('as-title').value.trim();
+  const desc    = document.getElementById('as-desc').value.trim();
+  const due     = document.getElementById('as-due').value;
+  if(!subject||!title||!due){ toast('Subject, title and due date required','error'); return; }
+  try {
+    await apiFetch('/assignments',{method:'POST',body:{department:dept,subject,title,description:desc,due_date:due}});
+    toast('Assignment posted!');
+    renderAssignments();
+  } catch(e){ toast(e.message,'error'); }
+}
+
+async function deleteAssignment(id){
+  try {
+    await apiFetch(`/assignments/${id}`,{method:'DELETE'});
+    toast('Assignment deleted.','info');
+    renderAssignments();
+  } catch(e){ toast(e.message,'error'); }
+}
+
+async function viewSubmissions(aid, title){
+  try {
+    const subs = await apiFetch(`/assignments/${aid}/submissions`);
+    openModal(`Submissions — ${title}`,
+      subs.length===0
+        ? `<p style="color:var(--bt2)">No submissions yet.</p>`
+        : `<div style="display:flex;flex-direction:column;gap:.6rem;max-height:340px;overflow-y:auto">
+            ${subs.map(s=>`
+              <div style="background:var(--bc2);border-radius:9px;padding:.7rem 1rem">
+                <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+                  <strong style="color:var(--bt)">${s.full_name}</strong>
+                  <span class="dept-chip">${s.department}</span>
+                </div>
+                <div style="font-size:.8rem;color:var(--bt2);margin-bottom:4px">${s.submission}</div>
+                <div style="font-size:.7rem;color:#60a5fa">${s.submitted_at}</div>
+              </div>`).join('')}
+          </div>`, '');
+  } catch(e){ toast(e.message,'error'); }
+}
+
+// ══════════════════════════════════════════════════════════════
+// ASSIGNMENTS — Student view
+// ══════════════════════════════════════════════════════════════
+async function renderMyAssignments(){
+  setPage('My Assignments','Account / Assignments',`<div style="text-align:center;padding:2rem"><div class="spinner"></div></div>`);
+  try {
+    const assignments = await apiFetch('/assignments');
+    const today = new Date().toISOString().split('T')[0];
+    setPage('My Assignments','Account / Assignments',`
+      <div style="max-width:680px">
+        ${assignments.length===0
+          ?`<div class="empty-state"><div class="ei">📝</div>No assignments posted yet.</div>`
+          : assignments.map(a=>{
+              const overdue = a.due_date < today;
+              const done    = !!a.submitted;
+              return`<div class="chart-card" style="margin-bottom:.8rem">
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.5rem">
+                  <div>
+                    <div style="font-weight:700;color:var(--bt);font-size:.95rem">${a.title}</div>
+                    <div style="font-size:.78rem;color:var(--bt2);margin-top:2px">${a.subject} · <span class="dept-chip">${a.department}</span></div>
+                    ${a.description?`<div style="font-size:.8rem;color:var(--bt2);margin-top:4px">${a.description}</div>`:''}
+                  </div>
+                  <div style="text-align:right">
+                    <div style="color:${overdue?'#ef4444':'#16a34a'};font-size:.78rem;font-family:'JetBrains Mono'">Due: ${a.due_date}</div>
+                    ${done?`<span class="risk-low" style="margin-top:4px;display:inline-block">✅ Submitted</span>`:
+                           `<span class="risk-high" style="margin-top:4px;display:inline-block">⏳ Pending</span>`}
+                  </div>
+                </div>
+                ${!done?`
+                  <div style="display:flex;gap:.6rem;align-items:flex-end;margin-top:.6rem">
+                    <input type="text" id="sub-${a.id}" placeholder="Type your answer or paste a link…"
+                      style="flex:1;padding:.5rem .8rem;background:var(--bc2);border:1px solid var(--bb);border-radius:8px;color:var(--bt);font-family:inherit;outline:none;font-size:.85rem">
+                    <button class="btn-primary" onclick="submitAssignment(${a.id})">📤 Submit</button>
+                  </div>`:
+                  `<p style="font-size:.78rem;color:#16a34a;margin-top:.4rem">✅ You have already submitted this assignment.</p>`}
+              </div>`;}).join('')}
+      </div>`);
+  } catch(e){ setPage('My Assignments','Account',`<div class="empty-state"><div class="ei">⚠️</div>${e.message}</div>`); }
+}
+
+async function submitAssignment(aid){
+  const text = document.getElementById(`sub-${aid}`)?.value.trim();
+  if(!text){ toast('Please write your submission first','error'); return; }
+  try {
+    await apiFetch(`/assignments/${aid}/submit`,{method:'POST',body:{submission:text}});
+    toast('Assignment submitted!');
+    renderMyAssignments();
+  } catch(e){ toast(e.message,'error'); }
+}
+function showForgotModal(){
+  document.getElementById('forgot-overlay').style.display = 'flex';
+  document.getElementById('fp-step0').style.display = 'block';
+  document.getElementById('fp-step1').style.display = 'none';
+  document.getElementById('fp-step2').style.display = 'none';
+  document.getElementById('fp-admin-section').style.display = 'none';
+  document.getElementById('fp-user-section').style.display = 'none';
+  document.getElementById('fp-error').textContent = '';
+  document.getElementById('fp-username').value = '';
+  document.getElementById('fp-role').value = '';
+}
+
+function hideForgotModal(){
+  document.getElementById('forgot-overlay').style.display = 'none';
+}
+
+function handleForgotRoleChange(){
+  const role = document.getElementById('fp-role').value;
+  document.getElementById('fp-admin-section').style.display = role==='admin' ? 'block' : 'none';
+  document.getElementById('fp-user-section').style.display = (role==='faculty'||role==='student') ? 'block' : 'none';
+  document.getElementById('fp-error').textContent = '';
+}
+
+async function forgotVerify(){
+  const username = document.getElementById('fp-username').value.trim();
+  const answer   = document.getElementById('fp-answer').value.trim();
+  const err      = document.getElementById('fp-error');
+  err.textContent = '';
+  if(!username || !answer){ err.textContent = 'Please fill in all fields.'; return; }
+  try {
+    const res  = await fetch('/api/forgot-password/verify', {
+      method:'POST', credentials:'include',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({username, answer})
+    });
+    const data = await res.json();
+    if(!res.ok){ err.textContent = data.error; return; }
+    document.getElementById('fp-step0').style.display = 'none';
+    document.getElementById('fp-step1').style.display = 'block';
+  } catch(e){ err.textContent = e.message; }
+}
+
+async function forgotReset(){
+  const new_password = document.getElementById('fp-newpw').value;
+  const confirm      = document.getElementById('fp-confirmpw').value;
+  const err          = document.getElementById('fp-error');
+  err.textContent = '';
+  if(new_password.length < 6){ err.textContent = 'Password must be at least 6 characters.'; return; }
+  if(new_password !== confirm){ err.textContent = 'Passwords do not match!'; return; }
+  try {
+    const res  = await fetch('/api/forgot-password/reset', {
+      method:'POST', credentials:'include',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({new_password})
+    });
+    const data = await res.json();
+    if(!res.ok){ err.textContent = data.error; return; }
+    hideForgotModal();
+    alert('✅ Password reset! Please log in with your new password.');
+  } catch(e){ err.textContent = e.message; }
+}
+
+async function forgotRequest(){
+  const username = document.getElementById('fp-username').value.trim();
+  const role     = document.getElementById('fp-role').value;
+  const err      = document.getElementById('fp-error');
+  err.textContent = '';
+  if(!username){ err.textContent = 'Please enter your username.'; return; }
+  try {
+    const res  = await fetch('/api/forgot-password/request', {
+      method:'POST', credentials:'include',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({username, role})
+    });
+    const data = await res.json();
+    if(!res.ok){ err.textContent = data.error; return; }
+    document.getElementById('fp-step0').style.display = 'none';
+    document.getElementById('fp-step2').style.display = 'block';
+  } catch(e){ err.textContent = e.message; }
+}
+
+async function resolveRequest(rid){
+  try {
+    await apiFetch(`/pwd-reset-requests/${rid}/resolve`, {method:'POST'});
+  } catch(_){}
+}
+// Paste this function in your <script>:
+async function setMySecurityAnswer(){
+ const answer = prompt('Set your answer for security question:\n\n"What is your favourite colour?"');
+  if(!answer || !answer.trim()) return;
+  try {
+    await apiFetch('/me/security-answer', {method:'POST', body:{answer: answer.trim()}});
+    toast('✅ Security answer saved!');
+  } catch(e){ toast(e.message,'error'); }
+}
+function filterTable(input){
+  const q=input.value.toLowerCase();
+  document.querySelectorAll('#student-table tbody tr').forEach(tr=>{tr.style.display=tr.dataset.search.includes(q)?'':'none';});
+}
+function exportHighPerformers() {
+  const a = document.createElement('a');
+  a.href = `${API}/students/export-high-performers`;
+  a.click();
+}
+</script>
+<div id="forgot-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:999;align-items:center;justify-content:center">
+  <div style="background:#fff;border-radius:18px;padding:2rem;width:360px;box-shadow:0 8px 40px rgba(0,0,0,.25)">
+    <h3 style="color:#c2185b;margin-bottom:.4rem">🔑 Forgot Password</h3>
+
+    <!-- STEP 0: Pick role -->
+    <div id="fp-step0">
+      <p style="font-size:.8rem;color:#888;margin-bottom:1rem">Select your role to continue.</p>
+      <label style="font-size:.8rem;color:#555;font-weight:600">Username</label>
+      <input id="fp-username" type="text" placeholder="Enter your username"
+             style="width:100%;padding:.6rem .8rem;border:1px solid #ddd;border-radius:8px;margin:.4rem 0 .8rem;font-size:.9rem;box-sizing:border-box;outline:none">
+      <label style="font-size:.8rem;color:#555;font-weight:600">Role</label>
+      <select id="fp-role"
+              style="width:100%;padding:.6rem .8rem;border:1px solid #ddd;border-radius:8px;margin:.4rem 0 .8rem;font-size:.9rem;box-sizing:border-box;outline:none"
+              onchange="handleForgotRoleChange()">
+        <option value="">Select role</option>
+        <option value="admin">Admin</option>
+        <option value="faculty">Faculty</option>
+        <option value="student">Student</option>
+      </select>
+
+      <!-- ADMIN: security question -->
+      <div id="fp-admin-section" style="display:none">
+        <label style="font-size:.8rem;color:#555;font-weight:600">
+          Security Question: <em style="color:#c2185b">What is your favourite colour?</em>
+        </label>
+        <input id="fp-answer" type="text" placeholder="Your answer"
+               style="width:100%;padding:.6rem .8rem;border:1px solid #ddd;border-radius:8px;margin:.4rem 0 .8rem;font-size:.9rem;box-sizing:border-box;outline:none">
+        <button onclick="forgotVerify()"
+                style="width:100%;padding:.75rem;background:#c2185b;color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer;margin-top:.3rem">
+          Verify →
+        </button>
+      </div>
+
+      <!-- FACULTY/STUDENT: request to admin -->
+      <div id="fp-user-section" style="display:none">
+        <div style="background:#fef9ec;border:1px solid #fcd34d;border-radius:8px;padding:.8rem;margin-bottom:.8rem;font-size:.82rem;color:#92400e">
+          ℹ️ Your reset request will be sent to the admin. They will give you a temporary password.
+        </div>
+        <button onclick="forgotRequest()"
+                style="width:100%;padding:.75rem;background:#c2185b;color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer">
+          Send Request to Admin →
+        </button>
+      </div>
+    </div>
+
+    <!-- STEP 1: Admin new password -->
+    <div id="fp-step1" style="display:none">
+      <div style="background:#f0fdf4;border:1px solid #86efac;border-radius:8px;padding:.7rem 1rem;margin-bottom:1rem;font-size:.83rem;color:#16a34a;font-weight:600">
+        ✅ Identity verified! Set your new password.
+      </div>
+      <label style="font-size:.8rem;color:#555;font-weight:600">New Password</label>
+      <input id="fp-newpw" type="password" placeholder="Min 6 characters"
+             style="width:100%;padding:.6rem .8rem;border:1px solid #ddd;border-radius:8px;margin:.4rem 0 .8rem;font-size:.9rem;box-sizing:border-box;outline:none">
+      <label style="font-size:.8rem;color:#555;font-weight:600">Confirm Password</label>
+      <input id="fp-confirmpw" type="password" placeholder="Repeat new password"
+             style="width:100%;padding:.6rem .8rem;border:1px solid #ddd;border-radius:8px;margin:.4rem 0 .8rem;font-size:.9rem;box-sizing:border-box;outline:none">
+      <button onclick="forgotReset()"
+              style="width:100%;padding:.75rem;background:#16a34a;color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer;margin-top:.3rem">
+        Reset Password ✅
+      </button>
+    </div>
+
+    <!-- STEP 2: Request sent confirmation -->
+    <div id="fp-step2" style="display:none">
+      <div style="background:#f0fdf4;border:1px solid #86efac;border-radius:8px;padding:1rem;font-size:.85rem;color:#16a34a;font-weight:600;text-align:center">
+        ✅ Request sent to admin!<br>
+        <span style="font-weight:400;font-size:.8rem;color:#555">Contact your admin — they will reset your password and give you a temporary one.</span>
+      </div>
+    </div>
+
+    <div id="fp-error" style="color:#dc2626;font-size:.8rem;margin-top:.7rem;text-align:center"></div>
+    <div style="text-align:center;margin-top:.8rem">
+      <span onclick="hideForgotModal()" style="font-size:.8rem;color:#aaa;cursor:pointer">✕ Cancel</span>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
