@@ -3,23 +3,23 @@ The Student Management System is a web-based application that helps colleges man
 
 ---
 
-## 🚀 Features
+##  Features
 
-### 🛡️ Admin
+### Admin
 - Create and manage Faculty and Student accounts
 - Enable / disable user accounts
 - Reset passwords (forces user to change on next login)
 - View full audit log of all system actions
 - Access all reports and analytics
 
-### 👨‍🏫 Faculty
+### Faculty
 - Add students and enter marks (internal + external per subject per semester)
 - Mark attendance individually or bulk (all present / all absent)
 - Post assignments with due dates and view student submissions
 - Upload and manage department timetables
 - View at-risk students, analytics, and bonus marks
 
-### 🎓 Student
+### Student
 - View personal academic record and subject-wise breakdown
 - Track semester-wise progress with improvement graph
 - View attendance percentage and recent records
@@ -29,7 +29,7 @@ The Student Management System is a web-based application that helps colleges man
 
 ---
 
-## 🧱 Tech Stack
+## Tech Stack
 
 | Layer     | Technology                        |
 |-----------|-----------------------------------|
