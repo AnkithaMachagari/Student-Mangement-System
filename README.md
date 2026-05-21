@@ -29,6 +29,14 @@ The Student Management System is a web-based application that helps colleges man
 
 ---
 
+# Results
+
+<img width="1117" height="701" alt="image" src="https://github.com/user-attachments/assets/20e58da9-d424-4648-886a-d4e55b98b56e" />
+<img width="1600" height="722" alt="image" src="https://github.com/user-attachments/assets/ed833c05-9aaf-4f16-a77a-1e21fd0e28ca" />
+<img width="1600" height="711" alt="image" src="https://github.com/user-attachments/assets/cfac3107-df6e-4503-846c-fb0ac55f5713" />
+<img width="1600" height="719" alt="image" src="https://github.com/user-attachments/assets/8cec90a0-410b-4e8a-9ece-8e05326f21e0" />
+
+
 ## Tech Stack
 
 | Layer     | Technology                        |
